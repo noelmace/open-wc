@@ -12,7 +12,8 @@ module.exports = {
   rules: {
     'arrow-parens': ['error', 'as-needed', { requireForBlockBody: true }],
     'no-underscore-dangle': 'off',
-    // air bnb restricts for of loops, which we want to allow. we can't cherry pick it out, so we have to copy over the existing rules
+    // air bnb restricts for of loops, which we want to allow. we can't cherry
+    // pick it out, so we have to copy over the existing rules
     'no-restricted-syntax': [
       'error',
       {
@@ -37,7 +38,12 @@ module.exports = {
     'import/no-extraneous-dependencies': [
       'error',
       {
-        devDependencies: ['**/test/**/*.js', '**/stories/**/*.js', '**/*.config.js'],
+        devDependencies: [
+          '**/test/**/*.js',
+          '**/stories/**/*.js',
+          '**/*.config.js',
+          '**/*.conf.js',
+        ],
       },
     ],
     'class-methods-use-this': [
