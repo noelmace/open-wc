@@ -154,12 +154,12 @@ const { mdjsProcess } = require('@mdjs/core');
 const data = await mdjsProcess(markdownString);
 console.log(data);
 /*
-{ 
+{
   jsCode: "
     import '@mdjs/mdjs-story/mdjs-story.js';
     ...
   ",
-  html: '<h1>Markdown One</h1>', 
+  html: '<h1>Markdown One</h1>',
 }
 */
 ```

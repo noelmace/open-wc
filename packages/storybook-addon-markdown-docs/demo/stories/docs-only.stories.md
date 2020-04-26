@@ -8,8 +8,8 @@ This is a MD file with only docs
 
 ## Using 2 spaces to create a line break
 
-x point 1  
-x point 2  
+x point 1
+x point 2
 x point 3
 
 ---
