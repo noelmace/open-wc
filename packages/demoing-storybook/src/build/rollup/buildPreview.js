@@ -1,10 +1,11 @@
-const { createRollupConfig } = require('./createRollupConfig');
-const { buildAndWrite } = require('./buildAndWrite');
-const { injectStories } = require('../../shared/injectStories');
-const { collectStoryIdsPlugin } = require('./collectStoryIdsPlugin');
-const { transformMdPlugin } = require('./transformMdPlugin');
-const { injectOrderedExportsPlugin } = require('./injectOrderedExportsPlugin');
-const { copyCustomElementsJsonPlugin } = require('./copyCustomElementsJsonPlugin');
+const {createRollupConfig} = require('./createRollupConfig');
+const {buildAndWrite} = require('./buildAndWrite');
+const {injectStories} = require('../../shared/injectStories');
+const {collectStoryIdsPlugin} = require('./collectStoryIdsPlugin');
+const {transformMdPlugin} = require('./transformMdPlugin');
+const {injectOrderedExportsPlugin} = require('./injectOrderedExportsPlugin');
+const {copyCustomElementsJsonPlugin} =
+    require('./copyCustomElementsJsonPlugin');
 
 /**
  * @param {object} param
@@ -23,29 +24,29 @@ async function buildPreview({
   storiesPatterns,
   rollupConfigDecorator,
 }) {
-  const { html } = await injectStories({
+  const {html} = await injectStories({
     iframeHTML,
     previewImport,
     previewConfigImport,
     storiesPatterns,
-    absolutePath: false,
-    rootDir: process.cwd(),
+    absolutePath : false,
+    rootDir : process.cwd(),
   });
 
   let config = createRollupConfig({
     outputDir,
-    indexFilename: 'iframe.html',
-    indexHTMLString: html,
+    indexFilename : 'iframe.html',
+    indexHTMLString : html,
   });
 
   // stories, filled by collectStoryIdsPlugin, shared by the other plugins
   const storyIds = [];
 
   config.plugins.unshift(
-    collectStoryIdsPlugin(storyIds),
-    transformMdPlugin(storyIds),
-    injectOrderedExportsPlugin(storyIds),
-    copyCustomElementsJsonPlugin(outputDir),
+      collectStoryIdsPlugin(storyIds),
+      transformMdPlugin(storyIds),
+      injectOrderedExportsPlugin(storyIds),
+      copyCustomElementsJsonPlugin(outputDir),
   );
 
   if (rollupConfigDecorator) {
@@ -55,4 +56,4 @@ async function buildPreview({
   await buildAndWrite(config);
 }
 
-module.exports = { buildPreview };
+module.exports = {buildPreview};

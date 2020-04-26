@@ -1,11 +1,13 @@
-import { html } from 'lit-html';
-import { fixtureWrapper } from './fixtureWrapper.js';
-import { elementUpdated } from './elementUpdated.js';
-import { litFixture } from './litFixture.js';
+import {html} from 'lit-html';
+
+import {elementUpdated} from './elementUpdated.js';
+import {fixtureWrapper} from './fixtureWrapper.js';
+import {litFixture} from './litFixture.js';
 
 /**
- * Setups an element synchronously from the provided string template and puts it in the DOM.
- * Allows to specify properties via an object or a function taking the element as an argument.
+ * Setups an element synchronously from the provided string template and puts it
+ * in the DOM. Allows to specify properties via an object or a function taking
+ * the element as an argument.
  *
  * @template {Element} T - Is an element or a node
  * @param {string} template
@@ -19,8 +21,9 @@ export function stringFixtureSync(template, options = {}) {
 }
 
 /**
- * Setups an element asynchronously from the provided string template and puts it in the DOM.
- * Allows to specify properties via an object or a function taking the element as an argument.
+ * Setups an element asynchronously from the provided string template and puts
+ * it in the DOM. Allows to specify properties via an object or a function
+ * taking the element as an argument.
  *
  * @template {Element} T - Is an element or a node
  * @param {string} template
@@ -30,7 +33,7 @@ export function stringFixtureSync(template, options = {}) {
 export async function stringFixture(template, options = {}) {
   if (options.scopedElements) {
     // @ts-ignore
-    return litFixture(html([template]), options);
+    return litFixture(html([ template ]), options);
   }
 
   const el = stringFixtureSync(template, options);

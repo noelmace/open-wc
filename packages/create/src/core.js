@@ -1,6 +1,6 @@
 /* eslint-disable no-console, import/no-cycle */
 
-import { spawn } from 'child_process';
+import {spawn} from 'child_process';
 import deepmerge from 'deepmerge';
 import fs from 'fs';
 import glob from 'glob';
@@ -13,7 +13,8 @@ import Generator from './Generator.js';
  * @param {Function[]} mixins
  * @param {typeof Generator} Base
  */
-export async function executeMixinGenerator(mixins, options = {}, Base = Generator) {
+export async function executeMixinGenerator(mixins, options = {},
+                                            Base = Generator) {
   class Start extends Base {}
   mixins.forEach(mixin => {
     // @ts-ignore
@@ -23,7 +24,7 @@ export async function executeMixinGenerator(mixins, options = {}, Base = Generat
 
   // class Do extends mixins(Base) {}
   const inst = new Start();
-  inst.options = { ...inst.options, ...options };
+  inst.options = {...inst.options, ...options};
 
   await inst.execute();
   if (!options.noEnd) {
@@ -33,9 +34,7 @@ export async function executeMixinGenerator(mixins, options = {}, Base = Generat
 
 export const virtualFiles = [];
 
-export function resetVirtualFiles() {
-  virtualFiles.length = 0;
-}
+export function resetVirtualFiles() { virtualFiles.length = 0; }
 
 /**
  * Minimal template system.
@@ -52,7 +51,8 @@ export function resetVirtualFiles() {
 export function processTemplate(_fileContent, data = {}) {
   let fileContent = _fileContent;
   Object.keys(data).forEach(key => {
-    fileContent = fileContent.replace(new RegExp(`<%= ${key} %>`, 'g'), data[key]);
+    fileContent =
+        fileContent.replace(new RegExp(`<%= ${key} %>`, 'g'), data[key]);
   });
   return fileContent;
 }
@@ -73,7 +73,7 @@ export function writeFileToPath(filePath, content) {
     }
   });
   if (addNewFile === true) {
-    virtualFiles.push({ path: filePath, content });
+    virtualFiles.push({path : filePath, content});
   }
 }
 
@@ -115,9 +115,7 @@ let overwriteAllFiles = false;
  *
  * @param {boolean} value
  */
-export function setOverrideAllFiles(value) {
-  overwriteAllFiles = value;
-}
+export function setOverrideAllFiles(value) { overwriteAllFiles = value; }
 
 /**
  *
@@ -126,13 +124,13 @@ export function setOverrideAllFiles(value) {
  * @param {object} obj Options
  */
 export async function writeFileToPathOnDisk(
-  toPath,
-  fileContent,
-  { override = false, ask = true } = {},
+    toPath,
+    fileContent,
+    {override = false, ask = true} = {},
 ) {
   const toPathDir = path.dirname(toPath);
   if (!fs.existsSync(toPathDir)) {
-    fs.mkdirSync(toPathDir, { recursive: true });
+    fs.mkdirSync(toPathDir, {recursive : true});
   }
   if (fs.existsSync(toPath)) {
     if (override || overwriteAllFiles) {
@@ -141,26 +139,24 @@ export async function writeFileToPathOnDisk(
       let wantOverride = overwriteAllFiles;
       if (!wantOverride) {
         const answers = await prompts(
-          [
+            [
+              {
+                type : 'select',
+                name : 'overwriteFile',
+                message : `Do you want to overwrite ${toPath}?`,
+                choices : [
+                  {title : 'Yes', value : 'true'},
+                  {
+                    title : 'Yes for all files',
+                    value : 'always',
+                  },
+                  {title : 'No', value : 'false'},
+                ],
+              },
+            ],
             {
-              type: 'select',
-              name: 'overwriteFile',
-              message: `Do you want to overwrite ${toPath}?`,
-              choices: [
-                { title: 'Yes', value: 'true' },
-                {
-                  title: 'Yes for all files',
-                  value: 'always',
-                },
-                { title: 'No', value: 'false' },
-              ],
+              onCancel : () => { process.exit(); },
             },
-          ],
-          {
-            onCancel: () => {
-              process.exit();
-            },
-          },
         );
         if (answers.overwriteFile === 'always') {
           setOverrideAllFiles(true);
@@ -233,8 +229,10 @@ export async function writeFilesToDisk() {
   virtualFiles.sort((a, b) => {
     const pathA = a.path.toLowerCase();
     const pathB = b.path.toLowerCase();
-    if (pathA < pathB) return -1;
-    if (pathA > pathB) return 1;
+    if (pathA < pathB)
+      return -1;
+    if (pathA > pathB)
+      return 1;
     return 0;
   });
 
@@ -250,22 +248,20 @@ export async function writeFilesToDisk() {
   console.log(filesToTree(treeFiles));
 
   const answers = await prompts(
-    [
+      [
+        {
+          type : 'select',
+          name : 'writeToDisk',
+          message : 'Do you want to write this file structure to disk?',
+          choices : [
+            {title : 'Yes', value : 'true'},
+            {title : 'No', value : 'false'},
+          ],
+        },
+      ],
       {
-        type: 'select',
-        name: 'writeToDisk',
-        message: 'Do you want to write this file structure to disk?',
-        choices: [
-          { title: 'Yes', value: 'true' },
-          { title: 'No', value: 'false' },
-        ],
+        onCancel : () => { process.exit(); },
       },
-    ],
-    {
-      onCancel: () => {
-        process.exit();
-      },
-    },
   );
 
   if (answers.writeToDisk === 'true') {
@@ -317,7 +313,7 @@ export function copyTemplate(fromPath, toPath, data) {
  */
 export function copyTemplates(fromGlob, toDir = process.cwd(), data = {}) {
   return new Promise(resolve => {
-    glob(fromGlob, { dot: true }, (er, files) => {
+    glob(fromGlob, {dot : true}, (er, files) => {
       const copiedFiles = [];
       files.forEach(filePath => {
         if (!fs.lstatSync(filePath).isDirectory()) {
@@ -326,10 +322,11 @@ export function copyTemplates(fromGlob, toDir = process.cwd(), data = {}) {
             const processed = processTemplate(fileContent, data);
 
             // find path write to (force / also on windows)
-            const replace = path.join(fromGlob.replace(/\*/g, '')).replace(/\\(?! )/g, '/');
+            const replace =
+                path.join(fromGlob.replace(/\*/g, '')).replace(/\\(?! )/g, '/');
             const toPath = filePath.replace(replace, `${toDir}/`);
 
-            copiedFiles.push({ toPath, processed });
+            copiedFiles.push({toPath, processed});
             writeFileToPath(toPath, processed);
           }
         }
@@ -346,10 +343,12 @@ export function copyTemplates(fromGlob, toDir = process.cwd(), data = {}) {
  * @param {object} data
  */
 export function copyTemplateJsonInto(
-  fromPath,
-  toPath,
-  data = {},
-  { mode = 'merge' } = { mode: 'merge' },
+    fromPath,
+    toPath,
+    data = {},
+    {mode = 'merge'} = {
+      mode : 'merge'
+    },
 ) {
   const content = readFileFromPath(fromPath);
   if (content === false) {
@@ -361,7 +360,8 @@ export function copyTemplateJsonInto(
   const overwriteMerge = (destinationArray, sourceArray) => sourceArray;
 
   const emptyTarget = value => (Array.isArray(value) ? [] : {});
-  const clone = (value, options) => deepmerge(emptyTarget(value), value, options);
+  const clone = (value, options) =>
+      deepmerge(emptyTarget(value), value, options);
 
   const combineMerge = (target, source, options) => {
     const destination = target.slice();
@@ -380,7 +380,7 @@ export function copyTemplateJsonInto(
     return destination;
   };
 
-  const mergeOptions = { arrayMerge: combineMerge };
+  const mergeOptions = {arrayMerge : combineMerge};
   if (mode === 'override') {
     mergeOptions.arrayMerge = overwriteMerge;
   }
@@ -400,18 +400,12 @@ export function copyTemplateJsonInto(
  */
 function _install(command = 'npm', options) {
   return new Promise(resolve => {
-    const install = spawn(command, ['install'], options);
-    install.stdout.on('data', data => {
-      console.log(`${data}`.trim());
-    });
+    const install = spawn(command, [ 'install' ], options);
+    install.stdout.on('data', data => { console.log(`${data}`.trim()); });
 
-    install.stderr.on('data', data => {
-      console.log(`${command}: ${data}`);
-    });
+    install.stderr.on('data', data => { console.log(`${command}: ${data}`); });
 
-    install.on('close', () => {
-      resolve();
-    });
+    install.on('close', () => { resolve(); });
   });
 }
 
@@ -425,6 +419,6 @@ export async function installNpm(where, command) {
   console.log('Installing dependencies...');
   console.log('This might take some time...');
   console.log(`Using ${command} to install...`);
-  await _install(command, { cwd: where, shell: true });
+  await _install(command, {cwd : where, shell : true});
   console.log('');
 }

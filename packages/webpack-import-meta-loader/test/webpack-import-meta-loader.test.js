@@ -1,16 +1,17 @@
 /* eslint-disable no-template-curly-in-string */
 
 import chai from 'chai';
+import {EOL as newLine} from 'os';
 import path from 'path';
-import { EOL as newLine } from 'os';
+
 import compiler from './compiler.js';
 
-const { expect } = chai;
+const {expect} = chai;
 
 const rules = [
   {
-    test: /\.js$/,
-    loader: path.resolve(__dirname, '../webpack-import-meta-loader.js'),
+    test : /\.js$/,
+    loader : path.resolve(__dirname, '../webpack-import-meta-loader.js'),
   },
 ];
 function getOnlyDynamicSource(source) {
@@ -23,15 +24,21 @@ describe('import-meta-url-loader', () => {
     const caseA = getOnlyDynamicSource(stats.toJson().modules[0].source);
 
     expect(caseA).to.equal(
-      `${"export const foo = new URL('./', ({ url: getAbsoluteUrl('caseA/index.js') }).url);"}${newLine}export const bar = new URL('./', ({ url: getAbsoluteUrl('caseA/index.js') }).url);${newLine}`,
+        `${
+        "export const foo = new URL('./', ({ url: getAbsoluteUrl('caseA/index.js') }).url);"}${
+            newLine}export const bar = new URL('./', ({ url: getAbsoluteUrl('caseA/index.js') }).url);${
+            newLine}`,
     );
 
     const statsReturn = await compiler('caseA/return.js', rules);
-    const caseAreturn = getOnlyDynamicSource(statsReturn.toJson().modules[0].source);
+    const caseAreturn =
+        getOnlyDynamicSource(statsReturn.toJson().modules[0].source);
     // eslint-disable-next-line quotes
-    expect(caseAreturn).to.equal(
-      `export const foo = () => ({ url: getAbsoluteUrl('caseA/return.js') });${newLine}`,
-    );
+    expect(caseAreturn)
+        .to.equal(
+            `export const foo = () => ({ url: getAbsoluteUrl('caseA/return.js') });${
+                newLine}`,
+        );
   });
 
   it('Replaces nested instances of import.meta', async () => {
@@ -40,11 +47,14 @@ describe('import-meta-url-loader', () => {
     const caseBsub = getOnlyDynamicSource(stats.toJson().modules[0].source);
 
     expect(caseB).to.equal(
-      `${"import './caseBsub/caseBsub.js';"}${newLine}${newLine}export const foo = new URL('./', ({ url: getAbsoluteUrl('caseB/index.js') }).url);${newLine}`,
+        `${"import './caseBsub/caseBsub.js';"}${newLine}${
+            newLine}export const foo = new URL('./', ({ url: getAbsoluteUrl('caseB/index.js') }).url);${
+            newLine}`,
     );
 
     expect(caseBsub).to.equal(
-      `export const bar = new URL('./', ({ url: getAbsoluteUrl('caseB/caseBsub/caseBsub.js') }).url);${newLine}`,
+        `export const bar = new URL('./', ({ url: getAbsoluteUrl('caseB/caseBsub/caseBsub.js') }).url);${
+            newLine}`,
     );
   });
 });

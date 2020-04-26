@@ -3,7 +3,10 @@
  * @typedef {import('./src/types').SpaOptions} SpaOptions
  */
 
-const { createBasicConfig } = require('./src/createBasicConfig');
-const { createSpaConfig } = require('./src/createSpaConfig');
+const {createBasicConfig} = require('./src/createBasicConfig');
+const {createSpaConfig} = require('./src/createSpaConfig');
 
-module.exports = { createBasicConfig, createSpaConfig };
+module.exports = {
+  createBasicConfig,
+  createSpaConfig
+};

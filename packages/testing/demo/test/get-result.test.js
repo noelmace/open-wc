@@ -1,6 +1,6 @@
-import { html, fixture, litFixture, expect } from '../../index.js';
-
 import '../src/get-result.js';
+
+import {expect, fixture, html, litFixture} from '../../index.js';
 
 describe('True Checking', () => {
   it('is false by default', async () => {
@@ -16,7 +16,8 @@ describe('True Checking', () => {
 
   it('true values will have a light-dom of <p>YEAH</p>', async () => {
     const foo = 1;
-    const el = await litFixture(html` <get-result .success=${foo === 1}></get-result> `);
+    const el = await litFixture(
+        html` <get-result .success=${foo === 1}></get-result> `);
     // @ts-ignore
     expect(el.success).to.be.true;
     expect(el).dom.to.equal('<get-result><p>YEAH</p></get-result>');

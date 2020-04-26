@@ -1,18 +1,15 @@
-import { expect, html, fixture } from '@open-wc/testing';
-import { spy } from 'sinon';
-import { render } from 'lit-html';
-import { live } from '../src/live.js';
+import {expect, fixture, html} from '@open-wc/testing';
+import {render} from 'lit-html';
+import {spy} from 'sinon';
+
+import {live} from '../src/live.js';
 
 describe('live', () => {
   before(() => {
     class LitHelpers extends HTMLElement {
-      set myProp(value) {
-        this._myProp = value;
-      }
+      set myProp(value) { this._myProp = value; }
 
-      get myProp() {
-        return this._myProp;
-      }
+      get myProp() { return this._myProp; }
     }
 
     customElements.define('lit-helpers', LitHelpers);
@@ -25,7 +22,8 @@ describe('live', () => {
     });
 
     function renderLive(value) {
-      render(html` <lit-helpers .myProp="${live(value)}"></lit-helpers> `, wrapper);
+      render(html` <lit-helpers .myProp="${live(value)}"></lit-helpers> `,
+             wrapper);
       return wrapper.firstElementChild;
     }
 
@@ -50,24 +48,27 @@ describe('live', () => {
       expect(element.myProp).to.equal(undefined);
     });
 
-    it('can change property values when the value on the element changes', () => {
-      const element = renderLive('foo');
-      element.myProp = 'bar';
-      renderLive('foo');
+    it('can change property values when the value on the element changes',
+       () => {
+         const element = renderLive('foo');
+         element.myProp = 'bar';
+         renderLive('foo');
 
-      expect(element.myProp).to.equal('foo');
-    });
+         expect(element.myProp).to.equal('foo');
+       });
 
-    it('does not set property values when the value on the element did not change', () => {
-      const element = renderLive(undefined);
-      const myPropSpy = /** @type {*} */ (spy(element, 'myProp', ['get', 'set']));
-      renderLive('foo');
-      expect(myPropSpy.set.callCount).to.equal(1);
-      renderLive('bar');
-      expect(myPropSpy.set.callCount).to.equal(2);
-      renderLive('bar');
-      expect(myPropSpy.set.callCount).to.equal(2);
-    });
+    it('does not set property values when the value on the element did not change',
+       () => {
+         const element = renderLive(undefined);
+         const myPropSpy =
+             /** @type {*} */ (spy(element, 'myProp', [ 'get', 'set' ]));
+         renderLive('foo');
+         expect(myPropSpy.set.callCount).to.equal(1);
+         renderLive('bar');
+         expect(myPropSpy.set.callCount).to.equal(2);
+         renderLive('bar');
+         expect(myPropSpy.set.callCount).to.equal(2);
+       });
   });
 
   describe('attribute bindings', () => {
@@ -102,23 +103,25 @@ describe('live', () => {
       expect(element.getAttribute('my-attr')).to.equal('undefined');
     });
 
-    it('can change attribute values when the value on the element changes', () => {
-      const element = renderLive('foo');
-      element.setAttribute('my-attr', 'bar');
-      renderLive('foo');
+    it('can change attribute values when the value on the element changes',
+       () => {
+         const element = renderLive('foo');
+         element.setAttribute('my-attr', 'bar');
+         renderLive('foo');
 
-      expect(element.getAttribute('my-attr')).to.equal('foo');
-    });
+         expect(element.getAttribute('my-attr')).to.equal('foo');
+       });
 
-    it('does not set attribute values when the value on the element did not change', () => {
-      const element = renderLive('');
-      const setAttribute = spy(element, 'setAttribute');
-      renderLive('foo');
-      expect(setAttribute.callCount).to.equal(1);
-      renderLive('bar');
-      expect(setAttribute.callCount).to.equal(2);
-      renderLive('bar');
-      expect(setAttribute.callCount).to.equal(2);
-    });
+    it('does not set attribute values when the value on the element did not change',
+       () => {
+         const element = renderLive('');
+         const setAttribute = spy(element, 'setAttribute');
+         renderLive('foo');
+         expect(setAttribute.callCount).to.equal(1);
+         renderLive('bar');
+         expect(setAttribute.callCount).to.equal(2);
+         renderLive('bar');
+         expect(setAttribute.callCount).to.equal(2);
+       });
   });
 });

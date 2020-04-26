@@ -37,7 +37,7 @@ function hasAttribute(element, name) {
 }
 module.exports.hasAttribute = hasAttribute;
 function hasSpaceSeparatedAttrValue(name, value) {
-  return function (element) {
+  return function(element) {
     var attributeValue = getAttribute(element, name);
     if (typeof attributeValue !== 'string') {
       return false;
@@ -62,7 +62,7 @@ function setAttribute(element, name, value) {
   if (i > -1) {
     element.attrs[i].value = value;
   } else {
-    element.attrs.push({ name: name, value: value });
+    element.attrs.push({name : name, value : value});
   }
 }
 module.exports.setAttribute = setAttribute;
@@ -75,7 +75,7 @@ function removeAttribute(element, name) {
 module.exports.removeAttribute = removeAttribute;
 function hasTagName(name) {
   var n = name.toLowerCase();
-  return function (node) {
+  return function(node) {
     if (!node.tagName) {
       return false;
     }
@@ -88,16 +88,14 @@ function hasTagName(name) {
  * This will use the lowercased tagName for comparison.
  */
 function hasMatchingTagName(regex) {
-  return function (node) {
+  return function(node) {
     if (!node.tagName) {
       return false;
     }
     return regex.test(node.tagName.toLowerCase());
   };
 }
-function hasClass(name) {
-  return hasSpaceSeparatedAttrValue('class', name);
-}
+function hasClass(name) { return hasSpaceSeparatedAttrValue('class', name); }
 function collapseTextRange(parent, start, end) {
   if (!parent.childNodes) {
     return;
@@ -178,7 +176,7 @@ function setTextContent(node, value) {
   } else {
     var tn = newTextNode(value);
     tn.parentNode = node;
-    node.childNodes = [tn];
+    node.childNodes = [ tn ];
   }
 }
 module.exports.setTextContent = setTextContent;
@@ -189,16 +187,14 @@ module.exports.setTextContent = setTextContent;
  * the textnode is the only child in that parent.
  */
 function hasTextValue(value) {
-  return function (node) {
-    return getTextContent(node) === value;
-  };
+  return function(node) { return getTextContent(node) === value; };
 }
 function OR() {
   var rules = new Array(arguments.length);
   for (var i = 0; i < arguments.length; i++) {
     rules[i] = arguments[i];
   }
-  return function (node) {
+  return function(node) {
     for (var i = 0; i < rules.length; i++) {
       if (rules[i](node)) {
         return true;
@@ -212,7 +208,7 @@ function AND() {
   for (var i = 0; i < arguments.length; i++) {
     rules[i] = arguments[i];
   }
-  return function (node) {
+  return function(node) {
     for (var i = 0; i < rules.length; i++) {
       if (!rules[i](node)) {
         return false;
@@ -225,16 +221,14 @@ function AND() {
  * negate an individual predicate, or a group with AND or OR
  */
 function NOT(predicateFn) {
-  return function (node) {
-    return !predicateFn(node);
-  };
+  return function(node) { return !predicateFn(node); };
 }
 /**
  * Returns a predicate that matches any node with a parent matching
  * `predicateFn`.
  */
 function parentMatches(predicateFn) {
-  return function (node) {
+  return function(node) {
     var parent = node.parentNode;
     while (parent !== undefined) {
       if (predicateFn(parent)) {
@@ -246,34 +240,22 @@ function parentMatches(predicateFn) {
   };
 }
 function hasAttr(attr) {
-  return function (node) {
-    return getAttributeIndex(node, attr) > -1;
-  };
+  return function(node) { return getAttributeIndex(node, attr) > -1; };
 }
 function hasAttrValue(attr, value) {
-  return function (node) {
-    return getAttribute(node, attr) === value;
-  };
+  return function(node) { return getAttribute(node, attr) === value; };
 }
-function isDocument(node) {
-  return node.nodeName === '#document';
-}
+function isDocument(node) { return node.nodeName === '#document'; }
 module.exports.isDocument = isDocument;
 function isDocumentFragment(node) {
   return node.nodeName === '#document-fragment';
 }
 module.exports.isDocumentFragment = isDocumentFragment;
-function isElement(node) {
-  return node.nodeName === node.tagName;
-}
+function isElement(node) { return node.nodeName === node.tagName; }
 module.exports.isElement = isElement;
-function isTextNode(node) {
-  return node.nodeName === '#text';
-}
+function isTextNode(node) { return node.nodeName === '#text'; }
 module.exports.isTextNode = isTextNode;
-function isCommentNode(node) {
-  return node.nodeName === '#comment';
-}
+function isCommentNode(node) { return node.nodeName === '#comment'; }
 module.exports.isCommentNode = isCommentNode;
 /**
  * Applies `mapfn` to `node` and the tree below `node`, returning a flattened
@@ -281,17 +263,15 @@ module.exports.isCommentNode = isCommentNode;
  */
 function treeMap(node, mapfn) {
   var results = [];
-  nodeWalk(node, function (node) {
+  nodeWalk(node, function(node) {
     results = results.concat(mapfn(node));
     return false;
   });
   return results;
 }
 module.exports.treeMap = treeMap;
-module.exports.defaultChildNodes = function (node) {
-  return node.childNodes;
-};
-module.exports.childNodesIncludeTemplate = function (node) {
+module.exports.defaultChildNodes = function(node) { return node.childNodes; };
+module.exports.childNodesIncludeTemplate = function(node) {
   if (node.nodeName === 'template') {
     return parse5_1.treeAdapters['default'].getTemplateContent(node).childNodes;
   }
@@ -462,43 +442,43 @@ function queryAll(node, predicate, matches, getChildNodes) {
 module.exports.queryAll = queryAll;
 function newTextNode(value) {
   return {
-    nodeName: '#text',
-    value: value,
-    parentNode: undefined,
-    attrs: [],
-    __location: undefined,
+    nodeName : '#text',
+    value : value,
+    parentNode : undefined,
+    attrs : [],
+    __location : undefined,
   };
 }
 function newCommentNode(comment) {
   return {
-    nodeName: '#comment',
-    data: comment,
-    parentNode: undefined,
-    attrs: [],
-    __location: undefined,
+    nodeName : '#comment',
+    data : comment,
+    parentNode : undefined,
+    attrs : [],
+    __location : undefined,
   };
 }
 function newElement(tagName, namespace) {
   return {
-    nodeName: tagName,
-    tagName: tagName,
-    childNodes: [],
-    namespaceURI: namespace || 'http://www.w3.org/1999/xhtml',
-    attrs: [],
-    parentNode: undefined,
-    __location: undefined,
+    nodeName : tagName,
+    tagName : tagName,
+    childNodes : [],
+    namespaceURI : namespace || 'http://www.w3.org/1999/xhtml',
+    attrs : [],
+    parentNode : undefined,
+    __location : undefined,
   };
 }
 function newDocumentFragment() {
   return {
-    nodeName: '#document-fragment',
-    childNodes: [],
-    parentNode: undefined,
-    quirksMode: false,
+    nodeName : '#document-fragment',
+    childNodes : [],
+    parentNode : undefined,
+    quirksMode : false,
     // TODO(rictic): update parse5 typings upstream to mention that attrs and
     //     __location are optional and not always present.
-    attrs: undefined,
-    __location: null,
+    attrs : undefined,
+    __location : null,
   };
 }
 function cloneNode(node) {
@@ -529,17 +509,16 @@ function insertNode(parent, index, newNode, replace) {
         newNode.childNodes.length = 0;
       }
     } else {
-      newNodes = [newNode];
+      newNodes = [ newNode ];
       remove(newNode);
     }
   }
   if (replace) {
     removedNode = parent.childNodes[index];
   }
-  Array.prototype.splice.apply(parent.childNodes, [index, replace ? 1 : 0].concat(newNodes));
-  newNodes.forEach(function (n) {
-    n.parentNode = parent;
-  });
+  Array.prototype.splice.apply(parent.childNodes,
+                               [ index, replace ? 1 : 0 ].concat(newNodes));
+  newNodes.forEach(function(n) { n.parentNode = parent; });
   if (removedNode) {
     removedNode.parentNode = undefined;
   }
@@ -596,15 +575,15 @@ module.exports.removeNodeSaveChildren = removeNodeSaveChildren;
  */
 function removeFakeRootElements(ast) {
   var injectedNodes = queryAll(
-    ast,
-    AND(function (node) {
-      return !node.__location;
-    }, hasMatchingTagName(/^(html|head|body)$/i)),
-    undefined,
-    // Don't descend past 3 levels 'document > html > head|body'
-    function (node) {
-      return node.parentNode && node.parentNode.parentNode ? undefined : node.childNodes;
-    },
+      ast,
+      AND(function(node) { return !node.__location; },
+          hasMatchingTagName(/^(html|head|body)$/i)),
+      undefined,
+      // Don't descend past 3 levels 'document > html > head|body'
+      function(node) {
+        return node.parentNode && node.parentNode.parentNode ? undefined
+                                                             : node.childNodes;
+      },
   );
   injectedNodes.reverse().forEach(removeNodeSaveChildren);
 }
@@ -615,21 +594,21 @@ function append(parent, newNode) {
 }
 module.exports.append = append;
 module.exports.predicates = {
-  hasClass: hasClass,
-  hasAttr: hasAttr,
-  hasAttrValue: hasAttrValue,
-  hasMatchingTagName: hasMatchingTagName,
-  hasSpaceSeparatedAttrValue: hasSpaceSeparatedAttrValue,
-  hasTagName: hasTagName,
-  hasTextValue: hasTextValue,
-  AND: AND,
-  OR: OR,
-  NOT: NOT,
-  parentMatches: parentMatches,
+  hasClass : hasClass,
+  hasAttr : hasAttr,
+  hasAttrValue : hasAttrValue,
+  hasMatchingTagName : hasMatchingTagName,
+  hasSpaceSeparatedAttrValue : hasSpaceSeparatedAttrValue,
+  hasTagName : hasTagName,
+  hasTextValue : hasTextValue,
+  AND : AND,
+  OR : OR,
+  NOT : NOT,
+  parentMatches : parentMatches,
 };
 module.exports.constructors = {
-  text: newTextNode,
-  comment: newCommentNode,
-  element: newElement,
-  fragment: newDocumentFragment,
+  text : newTextNode,
+  comment : newCommentNode,
+  element : newElement,
+  fragment : newDocumentFragment,
 };

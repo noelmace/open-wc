@@ -1,16 +1,15 @@
 /* eslint-disable no-console, max-classes-per-file */
-import isStream from 'is-stream';
 import getStream from 'get-stream';
-import Stream from 'stream';
+import isStream from 'is-stream';
+import {isBinaryFile} from 'isbinaryfile';
 import path from 'path';
-import { isBinaryFile } from 'isbinaryfile';
-import { virtualFilePrefix } from '../constants.js';
+import Stream from 'stream';
+
+import {virtualFilePrefix} from '../constants.js';
 
 let _debug = false;
 
-export function setDebug(debug) {
-  _debug = debug;
-}
+export function setDebug(debug) { _debug = debug; }
 
 export function logDebug(...messages) {
   if (_debug) {
@@ -40,9 +39,7 @@ const filePathsForRequests = new WeakMap();
  */
 export async function getBodyAsString(ctx) {
   let requestCanceled;
-  ctx.req.on('close', () => {
-    requestCanceled = true;
-  });
+  ctx.req.on('close', () => { requestCanceled = true; });
 
   if (Buffer.isBuffer(ctx.body)) {
     return ctx.body.toString();
@@ -92,12 +89,13 @@ export async function getBodyAsString(ctx) {
  * @returns {string}
  */
 export function toBrowserPath(filePath) {
-  return filePath.replace(new RegExp(path.sep === '\\' ? '\\\\' : path.sep, 'g'), '/');
+  return filePath.replace(
+      new RegExp(path.sep === '\\' ? '\\\\' : path.sep, 'g'), '/');
 }
 
 /**
- * Transforms a file system path to a browser URL. For example windows uses `\` on the file system,
- * but it should use `/` in the browser.
+ * Transforms a file system path to a browser URL. For example windows uses `\`
+ * on the file system, but it should use `/` in the browser.
  */
 export function toFilePath(browserPath) {
   return browserPath.replace(new RegExp('/', 'g'), path.sep);
@@ -115,7 +113,8 @@ export class SSEStream extends Stream.Transform {
 }
 
 /**
- * Returns the index html response, or null if this wasn't an index.html response
+ * Returns the index html response, or null if this wasn't an index.html
+ * response
  * @param {import('koa').Context} ctx
  * @param {string} appIndex
  * @returns {Promise<boolean>}
@@ -131,23 +130,18 @@ export async function isIndexHTMLResponse(ctx, appIndex) {
   }
 
   // make the check based on content-type and `accept` request header value
-  const contentType = ctx.response.header && ctx.response.header['content-type'];
+  const contentType =
+      ctx.response.header && ctx.response.header['content-type'];
   const acceptType = ctx.request.header && ctx.request.header.accept;
 
-  return (
-    contentType &&
-    contentType.includes('text/html') &&
-    acceptType &&
-    acceptType.includes('text/html')
-  );
+  return (contentType && contentType.includes('text/html') && acceptType &&
+          acceptType.includes('text/html'));
 }
 
 /**
  * @param {string} url
  */
-export function isPolyfill(url) {
-  return url.includes('/polyfills/');
-}
+export function isPolyfill(url) { return url.includes('/polyfills/'); }
 
 /**
  * @param {string} url
@@ -168,7 +162,8 @@ export function isInlineScript(url) {
  * @param {string} url
  */
 export function isGeneratedFile(url) {
-  return url.startsWith(virtualFilePrefix) || isPolyfill(url) || isInlineScript(url);
+  return url.startsWith(virtualFilePrefix) || isPolyfill(url) ||
+         isInlineScript(url);
 }
 
 /**

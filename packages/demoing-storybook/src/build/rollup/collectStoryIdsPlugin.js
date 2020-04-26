@@ -3,15 +3,16 @@
  */
 function collectStoryIdsPlugin(storyIds) {
   return {
-    name: 'story-ids',
-    // query params trip up rollup, so we strip them and remember which imports had them
+    name : 'story-ids',
+    // query params trip up rollup, so we strip them and remember which imports
+    // had them
     /**
      * @param {string} id
      */
     async resolveId(id) {
       const [queryPath, params] = id.split('?');
       if (params && params === 'storybook-story') {
-        const { id: resolved } = await this.resolve(queryPath);
+        const {id : resolved} = await this.resolve(queryPath);
         // mutating function parameter on purpose
         storyIds.push(resolved);
         return resolved;
@@ -22,4 +23,4 @@ function collectStoryIdsPlugin(storyIds) {
   };
 }
 
-module.exports = { collectStoryIdsPlugin };
+module.exports = {collectStoryIdsPlugin};

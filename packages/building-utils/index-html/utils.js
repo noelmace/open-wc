@@ -17,7 +17,8 @@ function cleanImportPath(path) {
 }
 
 function polyfillFilename(polyfill, polyfillsConfig) {
-  return `${polyfill.name}${polyfillsConfig.hashPolyfills ? `.${polyfill.hash}` : ''}`;
+  return `${polyfill.name}${
+      polyfillsConfig.hashPolyfills ? `.${polyfill.hash}` : ''}`;
 }
 
 module.exports = {

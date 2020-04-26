@@ -1,12 +1,12 @@
-import { LitElement, css, html } from 'lit-element';
-
 import 'page-a/page-a.js';
 import 'page-b/page-b.js';
+
+import {css, html, LitElement} from 'lit-element';
 
 class DemoApp extends LitElement {
   static get properties() {
     return {
-      page: { type: String },
+      page : {type : String},
     };
   }
 
@@ -66,14 +66,18 @@ class DemoApp extends LitElement {
     return html`
       <h1>Demo App</h1>
       <nav>
-        <button class=${this.page === 'A' ? 'active' : ''} @click=${() => (this.page = 'A')}>
+        <button class=${this.page === 'A' ? 'active' : ''} @click=${
+        () => (this.page = 'A')}>
           Page A
         </button>
-        <button class=${this.page === 'B' ? 'active' : ''} @click=${() => (this.page = 'B')}>
+        <button class=${this.page === 'B' ? 'active' : ''} @click=${
+        () => (this.page = 'B')}>
           Page B
         </button>
       </nav>
-      ${this.page === 'A' ? html` <page-a></page-a> ` : html` <page-b></page-b> `}
+      ${
+        this.page === 'A' ? html` <page-a></page-a> `
+                          : html` <page-b></page-b> `}
     `;
   }
 }

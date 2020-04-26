@@ -1,11 +1,12 @@
-import { LitElement, html, css } from 'lit-element';
-import { openWcLogo } from './open-wc-logo.js';
+import {css, html, LitElement} from 'lit-element';
 
-export class <%= className %> extends LitElement {
+import {openWcLogo} from './open-wc-logo.js';
+
+export class<%= className %> extends LitElement {
   static get properties() {
     return {
-      title: { type: String },
-      page: { type: String },
+      title : {type : String},
+      page : {type : String},
     };
   }
 
