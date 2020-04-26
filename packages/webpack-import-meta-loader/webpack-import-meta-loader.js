@@ -18,18 +18,17 @@ const regex = /import\.meta/g;
  * `${window.location.protocol}//${window.location.host}/relative/path/to/file.js`
  * }).url;
  */
-module.exports = function(source) {
+module.exports = function (source) {
   const path = require('path');
 
   const relativePath = this.context.substring(
-      this.context.indexOf(this.rootContext) + this.rootContext.length + 1,
-      this.resource.lastIndexOf(path.sep) + 1,
+    this.context.indexOf(this.rootContext) + this.rootContext.length + 1,
+    this.resource.lastIndexOf(path.sep) + 1,
   );
 
   const browserPath = toBrowserPath(relativePath);
 
-  const fileName =
-      this.resource.substring(this.resource.lastIndexOf(path.sep) + 1);
+  const fileName = this.resource.substring(this.resource.lastIndexOf(path.sep) + 1);
 
   let found = false;
   let rewrittenSource = source.replace(regex, () => {

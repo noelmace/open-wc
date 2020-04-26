@@ -5,18 +5,17 @@
 const path = require('path');
 const fs = require('fs');
 const Terser = require('terser');
-const {createContentHash, noModuleSupportTest, hasFileOfType, fileTypes} =
-    require('./utils');
+const { createContentHash, noModuleSupportTest, hasFileOfType, fileTypes } = require('./utils');
 
 /**
  * @param {PolyfillsLoaderConfig} cfg
  * @returns {{ coreJs?: PolyfillFile, polyfillFiles: PolyfillFile[] }}
  */
 function createPolyfillsData(cfg) {
-  const {polyfills = {}} = cfg;
+  const { polyfills = {} } = cfg;
 
   /** @type {PolyfillConfig[]} */
-  const polyfillConfigs = [...(polyfills.custom || []) ];
+  const polyfillConfigs = [...(polyfills.custom || [])];
 
   /**
    * @param {PolyfillConfig} polyfillConfig
@@ -27,9 +26,8 @@ function createPolyfillsData(cfg) {
     } catch (error) {
       if (error.code === 'MODULE_NOT_FOUND') {
         throw new Error(
-            `[Polyfills loader]: Error resolving polyfill ${
-                polyfillConfig.name}` +
-                ' Are dependencies installed correctly?',
+          `[Polyfills loader]: Error resolving polyfill ${polyfillConfig.name}` +
+            ' Are dependencies installed correctly?',
         );
       }
 
@@ -39,18 +37,17 @@ function createPolyfillsData(cfg) {
 
   if (polyfills.coreJs) {
     addPolyfillConfig({
-      name : 'core-js',
-      path : require.resolve('core-js-bundle/minified.js'),
-      test : noModuleSupportTest,
+      name: 'core-js',
+      path: require.resolve('core-js-bundle/minified.js'),
+      test: noModuleSupportTest,
     });
   }
 
   if (polyfills.regeneratorRuntime) {
     addPolyfillConfig({
-      name : 'regenerator-runtime',
-      test : polyfills.regeneratorRuntime !== 'always' ? noModuleSupportTest
-                                                       : undefined,
-      path : require.resolve('regenerator-runtime/runtime'),
+      name: 'regenerator-runtime',
+      test: polyfills.regeneratorRuntime !== 'always' ? noModuleSupportTest : undefined,
+      path: require.resolve('regenerator-runtime/runtime'),
     });
   }
 
@@ -77,36 +74,33 @@ function createPolyfillsData(cfg) {
   }
 
   // load systemjs, an es module polyfill, if one of the entries needs it
-  const hasSystemJs = cfg.polyfills && cfg.polyfills.custom &&
-                      cfg.polyfills.custom.find(c => c.name === 'systemjs');
+  const hasSystemJs =
+    cfg.polyfills && cfg.polyfills.custom && cfg.polyfills.custom.find(c => c.name === 'systemjs');
   if (!hasSystemJs && hasFileOfType(cfg, fileTypes.SYSTEMJS)) {
     const name = 'systemjs';
-    const alwaysLoad =
-        cfg.modern.files.some(f => f.type === fileTypes.SYSTEMJS);
-    const test = alwaysLoad || !cfg.legacy
-                     ? undefined
-                     : cfg.legacy.map(e => e.test).join(' || ');
+    const alwaysLoad = cfg.modern.files.some(f => f.type === fileTypes.SYSTEMJS);
+    const test = alwaysLoad || !cfg.legacy ? undefined : cfg.legacy.map(e => e.test).join(' || ');
 
     if (polyfills.systemjsExtended) {
       // full systemjs, including import maps polyfill
       addPolyfillConfig({
         name,
         test,
-        path : require.resolve('systemjs/dist/system.min.js'),
+        path: require.resolve('systemjs/dist/system.min.js'),
       });
     } else {
       // plain systemjs as es module polyfill
       addPolyfillConfig({
         name,
         test,
-        path : require.resolve('systemjs/dist/s.min.js'),
+        path: require.resolve('systemjs/dist/s.min.js'),
       });
     }
   }
 
   if (polyfills.dynamicImport) {
     addPolyfillConfig({
-      name : 'dynamic-import',
+      name: 'dynamic-import',
       /**
        * dynamic import is syntax, not an actual function so we cannot feature
        * detect it without using an import statement. using a dynamic import on
@@ -119,63 +113,57 @@ function createPolyfillsData(cfg) {
        * might be blocked by CSP as well. In that case users should use systemjs
        * instead.
        */
-      test :
-          "'noModule' in HTMLScriptElement.prototype && " +
-              "(function () { try { Function('window.importShim = s => import(s);').call(); return false; } catch (_) { return true; } })()",
-      path : require.resolve(
-          'dynamic-import-polyfill/dist/dynamic-import-polyfill.umd.js'),
-      initializer :
-          "window.dynamicImportPolyfill.initialize({ importFunctionName: 'importShim' });",
+      test:
+        "'noModule' in HTMLScriptElement.prototype && " +
+        "(function () { try { Function('window.importShim = s => import(s);').call(); return false; } catch (_) { return true; } })()",
+      path: require.resolve('dynamic-import-polyfill/dist/dynamic-import-polyfill.umd.js'),
+      initializer: "window.dynamicImportPolyfill.initialize({ importFunctionName: 'importShim' });",
     });
   }
 
   if (polyfills.esModuleShims) {
     addPolyfillConfig({
-      name : 'es-module-shims',
-      test : "'noModule' in HTMLScriptElement.prototype",
-      path : require.resolve('es-module-shims/dist/es-module-shims.min.js'),
-      fileType : fileTypes.MODULE,
+      name: 'es-module-shims',
+      test: "'noModule' in HTMLScriptElement.prototype",
+      path: require.resolve('es-module-shims/dist/es-module-shims.min.js'),
+      fileType: fileTypes.MODULE,
     });
   }
 
   if (polyfills.intersectionObserver) {
     addPolyfillConfig({
-      name : 'intersection-observer',
-      test :
-          "!('IntersectionObserver' in window && 'IntersectionObserverEntry' in window && 'intersectionRatio' in window.IntersectionObserverEntry.prototype)",
-      path : require.resolve('intersection-observer/intersection-observer.js'),
-      minify : true,
+      name: 'intersection-observer',
+      test:
+        "!('IntersectionObserver' in window && 'IntersectionObserverEntry' in window && 'intersectionRatio' in window.IntersectionObserverEntry.prototype)",
+      path: require.resolve('intersection-observer/intersection-observer.js'),
+      minify: true,
     });
   }
 
   if (polyfills.resizeObserver) {
     addPolyfillConfig({
-      name : 'resize-observer',
-      test : "!('ResizeObserver' in window)",
-      path : require.resolve(
-          'resize-observer-polyfill/dist/ResizeObserver.global.js'),
-      minify : true,
+      name: 'resize-observer',
+      test: "!('ResizeObserver' in window)",
+      path: require.resolve('resize-observer-polyfill/dist/ResizeObserver.global.js'),
+      minify: true,
     });
   }
 
   if (polyfills.webcomponents && !polyfills.shadyCssCustomStyle) {
     addPolyfillConfig({
-      name : 'webcomponents',
-      test :
-          "!('attachShadow' in Element.prototype) || !('getRootNode' in Element.prototype) || (window.ShadyDOM && window.ShadyDOM.force)",
-      path : require.resolve(
-          '@webcomponents/webcomponentsjs/webcomponents-bundle.js'),
+      name: 'webcomponents',
+      test:
+        "!('attachShadow' in Element.prototype) || !('getRootNode' in Element.prototype) || (window.ShadyDOM && window.ShadyDOM.force)",
+      path: require.resolve('@webcomponents/webcomponentsjs/webcomponents-bundle.js'),
     });
 
     // If a browser does not support nomodule attribute, but does support custom
     // elements, we need to load the custom elements es5 adapter. This is the
     // case for Safari 10.1
     addPolyfillConfig({
-      name : 'custom-elements-es5-adapter',
-      test :
-          "!('noModule' in HTMLScriptElement.prototype) && 'getRootNode' in Element.prototype",
-      path : require.resolve(
-          '@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js'),
+      name: 'custom-elements-es5-adapter',
+      test: "!('noModule' in HTMLScriptElement.prototype) && 'getRootNode' in Element.prototype",
+      path: require.resolve('@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js'),
     });
   }
 
@@ -185,16 +173,12 @@ function createPolyfillsData(cfg) {
     // two together.
 
     addPolyfillConfig({
-      name : 'webcomponents-shady-css-custom-style',
-      test :
-          "!('attachShadow' in Element.prototype) || !('getRootNode' in Element.prototype)",
-      path : [
-        require.resolve(
-            '@webcomponents/webcomponentsjs/webcomponents-bundle.js'),
-        require.resolve(
-            '@webcomponents/shadycss/custom-style-interface.min.js'),
-        require.resolve(
-            'shady-css-scoped-element/shady-css-scoped-element.min.js'),
+      name: 'webcomponents-shady-css-custom-style',
+      test: "!('attachShadow' in Element.prototype) || !('getRootNode' in Element.prototype)",
+      path: [
+        require.resolve('@webcomponents/webcomponentsjs/webcomponents-bundle.js'),
+        require.resolve('@webcomponents/shadycss/custom-style-interface.min.js'),
+        require.resolve('shady-css-scoped-element/shady-css-scoped-element.min.js'),
       ],
     });
   }
@@ -206,8 +190,7 @@ function createPolyfillsData(cfg) {
    */
   function readPolyfillFileContents(filePath) {
     const codePath = path.resolve(filePath);
-    if (!codePath || !fs.existsSync(codePath) ||
-        !fs.statSync(codePath).isFile()) {
+    if (!codePath || !fs.existsSync(codePath) || !fs.statSync(codePath).isFile()) {
       throw new Error(`Could not find a file at ${filePath}`);
     }
     return fs.readFileSync(filePath, 'utf-8');
@@ -224,31 +207,27 @@ function createPolyfillsData(cfg) {
     }
     let content = '';
     if (Array.isArray(polyfillConfig.path)) {
-      content =
-          polyfillConfig.path.map(p => readPolyfillFileContents(p)).join('');
+      content = polyfillConfig.path.map(p => readPolyfillFileContents(p)).join('');
     } else {
       content = readPolyfillFileContents(polyfillConfig.path);
     }
     if (polyfillConfig.minify) {
-      const minifyResult = Terser.minify(content, {sourceMap : false});
+      const minifyResult = Terser.minify(content, { sourceMap: false });
       // @ts-ignore
       content = minifyResult.code;
     }
 
-    const filePath = `${
-        path.posix.join(
-            cfg.polyfillsDir || 'polyfills',
-            `${polyfillConfig.name}${
-                polyfills.hash !== false ? `.${createContentHash(content)}`
-                                         : ''}`,
-            )}.js`;
+    const filePath = `${path.posix.join(
+      cfg.polyfillsDir || 'polyfills',
+      `${polyfillConfig.name}${polyfills.hash !== false ? `.${createContentHash(content)}` : ''}`,
+    )}.js`;
 
     const polyfillFile = {
-      type : polyfillConfig.fileType || fileTypes.SCRIPT,
-      path : filePath,
+      type: polyfillConfig.fileType || fileTypes.SCRIPT,
+      path: filePath,
       content,
-      test : polyfillConfig.test,
-      initializer : polyfillConfig.initializer,
+      test: polyfillConfig.test,
+      initializer: polyfillConfig.initializer,
     };
 
     if (polyfillConfig.name !== 'core-js') {
@@ -258,7 +237,7 @@ function createPolyfillsData(cfg) {
     }
   }
 
-  return {coreJs, polyfillFiles};
+  return { coreJs, polyfillFiles };
 }
 
 module.exports = {

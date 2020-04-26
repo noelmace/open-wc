@@ -1,4 +1,4 @@
-const {rollup} = require('rollup');
+const { rollup } = require('rollup');
 
 /**
  * @param {object} config
@@ -14,4 +14,4 @@ async function buildAndWrite(config) {
   }
 }
 
-module.exports = {buildAndWrite};
+module.exports = { buildAndWrite };

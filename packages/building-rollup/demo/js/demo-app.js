@@ -2,7 +2,7 @@
 import './a/b/import-meta-test-2.js';
 import './demo-component.js';
 
-import {css, html, LitElement} from 'lit-element';
+import { css, html, LitElement } from 'lit-element';
 
 // partial css trips up the minifier
 const fontSize = css`
@@ -44,7 +44,7 @@ const stylesToBeMinified = css`
 
 const partialCSS = DemoApp.styles.cssText.replace(/\s/g, '');
 const foo = {
-  bar : 'lorem ipsum'
+  bar: 'lorem ipsum',
 };
 const loremIpsum = undefined;
 
@@ -53,7 +53,9 @@ async function asyncFunction() {
   return true;
 }
 
-async function asyncFunction2() { return 'x'; }
+async function asyncFunction2() {
+  return 'x';
+}
 
 console.log(asyncFunction2);
 
@@ -69,7 +71,7 @@ function forOf() {
 }
 
 const myAsyncIterable = {
-  async * [ Symbol.asyncIterator ]() {
+  async *[Symbol.asyncIterator]() {
     yield 1;
     yield 2;
     yield 3;
@@ -87,16 +89,14 @@ function getAsyncIterated() {
 
 window.__startsWith = 'foo'.startsWith('fo');
 window.__map = new Map().set('foo', 'bar').get('foo') === 'bar';
-window.__importMeta = import.meta.url.startsWith(window.location.origin) &&
-                      import.meta.url.endsWith('demo-app.js');
+window.__importMeta =
+  import.meta.url.startsWith(window.location.origin) && import.meta.url.endsWith('demo-app.js');
 window.__asyncFunction = asyncFunction();
 window.__forOf = forOf() === 3;
-window.__optionalChaining =
-    foo ?.bar === 'lorem ipsum' && foo ?.bar ?.loremIpsum === undefined;
+window.__optionalChaining = foo?.bar === 'lorem ipsum' && foo?.bar?.loremIpsum === undefined;
 window.__nullishCoalescing = (loremIpsum ?? 'lorem ipsum') === 'lorem ipsum';
 window.__asyncIterator = getAsyncIterated().then(r => r === 6);
-window.__partialCSS = partialCSS.includes('font-size:16px') &&
-                      partialCSS.includes('display:block');
+window.__partialCSS = partialCSS.includes('font-size:16px') && partialCSS.includes('display:block');
 window.__minifiedCSS = stylesToBeMinified.cssText === '';
 window.__litElement = (async () => {
   await import('./lazy-component.js');
@@ -113,7 +113,9 @@ window.__litElement = (async () => {
   const lazyComponent = app.shadowRoot.querySelector('lazy-component');
   await lazyComponent.updateComplete;
 
-  return (app.shadowRoot.innerHTML.includes('Demo app</p>') &&
-          demoComponent.shadowRoot.innerHTML.includes('Demo component</p>') &&
-          lazyComponent.shadowRoot.innerHTML.includes('Lazy component</p>'));
+  return (
+    app.shadowRoot.innerHTML.includes('Demo app</p>') &&
+    demoComponent.shadowRoot.innerHTML.includes('Demo component</p>') &&
+    lazyComponent.shadowRoot.innerHTML.includes('Lazy component</p>')
+  );
 })();

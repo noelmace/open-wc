@@ -3,7 +3,7 @@
 /** @typedef {import('./types').FileType} FileType */
 /** @typedef {import('./types').PolyfillsLoaderConfig} PolyfillsLoaderConfig */
 
-const {getAttribute} = require('@open-wc/building-utils/dom5-fork');
+const { getAttribute } = require('@open-wc/building-utils/dom5-fork');
 const crypto = require('crypto');
 
 const noModuleSupportTest = "!('noModule' in HTMLScriptElement.prototype)";
@@ -13,10 +13,10 @@ const noModuleSupportTest = "!('noModule' in HTMLScriptElement.prototype)";
  *     FileType>}
  */
 const fileTypes = {
-  SCRIPT : 'script',
-  MODULE : 'module',
-  ES_MODULE_SHIMS : 'es-module-shims',
-  SYSTEMJS : 'systemjs',
+  SCRIPT: 'script',
+  MODULE: 'module',
+  ES_MODULE_SHIMS: 'es-module-shims',
+  SYSTEMJS: 'systemjs',
 };
 
 /**
@@ -48,8 +48,7 @@ function cleanImportPath(importPath) {
  * @returns {FileType}
  */
 function getScriptFileType(script) {
-  return getAttribute(script, 'type') === 'module' ? fileTypes.MODULE
-                                                   : fileTypes.SCRIPT;
+  return getAttribute(script, 'type') === 'module' ? fileTypes.MODULE : fileTypes.SCRIPT;
 }
 
 /**
@@ -58,8 +57,9 @@ function getScriptFileType(script) {
  */
 function hasFileOfType(cfg, type) {
   return (
-      cfg.modern.files.some(f => f.type === type) ||
-      (cfg.legacy && cfg.legacy.some(e => e.files.some(f => f.type === type))));
+    cfg.modern.files.some(f => f.type === type) ||
+    (cfg.legacy && cfg.legacy.some(e => e.files.some(f => f.type === type)))
+  );
 }
 
 module.exports = {

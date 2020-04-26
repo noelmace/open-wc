@@ -1,6 +1,6 @@
-import {isValidRenderArg} from './lib.js';
-import {litFixture, litFixtureSync} from './litFixture.js';
-import {stringFixture, stringFixtureSync} from './stringFixture.js';
+import { isValidRenderArg } from './lib.js';
+import { litFixture, litFixtureSync } from './litFixture.js';
+import { stringFixture, stringFixtureSync } from './stringFixture.js';
 
 /**
  * @typedef {object} FixtureOptions
@@ -30,7 +30,7 @@ export function fixtureSync(template, options) {
     return litFixtureSync(template, options);
   }
   throw new Error(
-      'Invalid template provided - string, number, boolean, Node, TemplateResult, or array or iterable thereof are supported',
+    'Invalid template provided - string, number, boolean, Node, TemplateResult, or array or iterable thereof are supported',
   );
 }
 
@@ -66,6 +66,5 @@ export async function fixture(template, options) {
   if (isValidRenderArg(template)) {
     return litFixture(template, options);
   }
-  throw new Error(
-      'Invalid template provided - string or lit-html TemplateResult is supported');
+  throw new Error('Invalid template provided - string or lit-html TemplateResult is supported');
 }

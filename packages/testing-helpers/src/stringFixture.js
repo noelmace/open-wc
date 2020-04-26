@@ -1,8 +1,8 @@
-import {html} from 'lit-html';
+import { html } from 'lit-html';
 
-import {elementUpdated} from './elementUpdated.js';
-import {fixtureWrapper} from './fixtureWrapper.js';
-import {litFixture} from './litFixture.js';
+import { elementUpdated } from './elementUpdated.js';
+import { fixtureWrapper } from './fixtureWrapper.js';
+import { litFixture } from './litFixture.js';
 
 /**
  * Setups an element synchronously from the provided string template and puts it
@@ -33,7 +33,7 @@ export function stringFixtureSync(template, options = {}) {
 export async function stringFixture(template, options = {}) {
   if (options.scopedElements) {
     // @ts-ignore
-    return litFixture(html([ template ]), options);
+    return litFixture(html([template]), options);
   }
 
   const el = stringFixtureSync(template, options);

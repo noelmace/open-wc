@@ -1,3 +1,3 @@
 module.exports = {
-  message : 'CommonJS plugin works',
+  message: 'CommonJS plugin works',
 };

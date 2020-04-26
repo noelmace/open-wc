@@ -1,31 +1,32 @@
 import chai from 'chai';
 import chaiFs from 'chai-fs';
-import {exec as _exec} from 'child_process';
-import {CLIEngine} from 'eslint';
-import {lstatSync, readdirSync, readFileSync} from 'fs';
-import {join} from 'path';
+import { exec as _exec } from 'child_process';
+import { CLIEngine } from 'eslint';
+import { lstatSync, readdirSync, readFileSync } from 'fs';
+import { join } from 'path';
 import _rimraf from 'rimraf';
-import {promisify} from 'util';
+import { promisify } from 'util';
 
-import {generateCommand} from './generate-command.js';
+import { generateCommand } from './generate-command.js';
 
 const exec = promisify(_exec);
 
 const rimraf = promisify(_rimraf);
 
-const {expect} = chai;
+const { expect } = chai;
 
 chai.use(chaiFs);
 
-const getFileMessages = ({messages, filePath}) =>
-    `${filePath}:\n${messages.join('\n')}`;
+const getFileMessages = ({ messages, filePath }) => `${filePath}:\n${messages.join('\n')}`;
 
 const ACTUAL_PATH = join(process.cwd(), './scaffold-app');
 
 /**
  * Deletes the test files
  */
-async function deleteGenerated() { await rimraf(ACTUAL_PATH); }
+async function deleteGenerated() {
+  await rimraf(ACTUAL_PATH);
+}
 
 /**
  * Removes text from the cli output which is specific to the local environment,
@@ -58,8 +59,8 @@ function checkSnapshotContents(expectedPath, actualPath) {
     const actualFilePath = join(actualPath, filename);
     const expectedFilePath = join(expectedPath, filename);
     return lstatSync(actualFilePath).isDirectory()
-               ? checkSnapshotContents(expectedFilePath, actualFilePath)
-               : assertFile(expectedFilePath, actualFilePath);
+      ? checkSnapshotContents(expectedFilePath, actualFilePath)
+      : assertFile(expectedFilePath, actualFilePath);
   });
 }
 
@@ -67,13 +68,12 @@ let stdout;
 let stderr;
 let EXPECTED_OUTPUT;
 
-const generate =
-    ({command, expectedPath}) => async function generateTestProject() {
-      ({stdout, stderr} = await exec(command));
-      const EXPECTED_PATH =
-          join(expectedPath, '../fully-loaded-app.output.txt');
-      EXPECTED_OUTPUT = readFileSync(EXPECTED_PATH, 'utf-8');
-    };
+const generate = ({ command, expectedPath }) =>
+  async function generateTestProject() {
+    ({ stdout, stderr } = await exec(command));
+    const EXPECTED_PATH = join(expectedPath, '../fully-loaded-app.output.txt');
+    EXPECTED_OUTPUT = readFileSync(EXPECTED_PATH, 'utf-8');
+  };
 
 describe('create', function create() {
   this.timeout(10000);
@@ -83,9 +83,9 @@ describe('create', function create() {
 
   const expectedPath = join(__dirname, './snapshots/fully-loaded-app');
 
-  const command = generateCommand({destinationPath});
+  const command = generateCommand({ destinationPath });
 
-  before(generate({command, expectedPath}));
+  before(generate({ command, expectedPath }));
 
   after(deleteGenerated);
 
@@ -103,12 +103,13 @@ describe('create', function create() {
     expect(stripUserDir(stdout)).to.equal(stripUserDir(EXPECTED_OUTPUT));
   });
 
-  it('does not exit with an error', () => { expect(stderr).to.not.be.ok; });
+  it('does not exit with an error', () => {
+    expect(stderr).to.not.be.ok;
+  });
 
   it('generates a project which passes linting', async () => {
-    const cli = new CLIEngine({useEslintrc : true});
-    const {errorCount, warningCount, messages = []} =
-        cli.executeOnFiles([ ACTUAL_PATH ]);
+    const cli = new CLIEngine({ useEslintrc: true });
+    const { errorCount, warningCount, messages = [] } = cli.executeOnFiles([ACTUAL_PATH]);
     const prettyOutput = messages.map(getFileMessages).join('\n\n');
     expect(errorCount).to.equal(0, prettyOutput);
     expect(warningCount).to.equal(0, prettyOutput);

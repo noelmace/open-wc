@@ -1,14 +1,13 @@
 const resolve = require('@rollup/plugin-node-resolve');
-const {terser} = require('rollup-plugin-terser');
+const { terser } = require('rollup-plugin-terser');
 const babel = require('rollup-plugin-babel');
 const html = require('@open-wc/rollup-plugin-html');
 const polyfillsLoader = require('@open-wc/rollup-plugin-polyfills-loader');
-const {DEFAULT_EXTENSIONS} = require('@babel/core');
+const { DEFAULT_EXTENSIONS } = require('@babel/core');
 
-const prebuiltDir = require.resolve('storybook-prebuilt/package.json')
-                        .replace('/package.json', '');
+const prebuiltDir = require.resolve('storybook-prebuilt/package.json').replace('/package.json', '');
 
-const ignoredWarnings = [ 'EVAL', 'THIS_IS_UNDEFINED' ];
+const ignoredWarnings = ['EVAL', 'THIS_IS_UNDEFINED'];
 
 function onwarn(warning, warn) {
   if (ignoredWarnings.includes(warning.code)) {
@@ -23,30 +22,30 @@ function onwarn(warning, warn) {
  * @param {string} args.indexFilename
  * @param {string} args.indexHTMLString
  */
-function createRollupConfig({outputDir, indexFilename, indexHTMLString}) {
+function createRollupConfig({ outputDir, indexFilename, indexHTMLString }) {
   const config = {
-    preserveEntrySignatures : false,
-    output : {
-      entryFileNames : '[hash].js',
-      chunkFileNames : '[hash].js',
-      assetFileNames : '[hash][extname]',
-      format : 'system',
-      dir : outputDir,
+    preserveEntrySignatures: false,
+    output: {
+      entryFileNames: '[hash].js',
+      chunkFileNames: '[hash].js',
+      assetFileNames: '[hash][extname]',
+      format: 'system',
+      dir: outputDir,
     },
-    plugins : [
+    plugins: [
       // @ts-ignore
       resolve({
-        moduleDirectory : [ 'node_modules', 'web_modules' ],
+        moduleDirectory: ['node_modules', 'web_modules'],
       }),
       babel({
-        babelHelpers : 'bundled',
-        extensions : [...DEFAULT_EXTENSIONS, 'md', 'mdx' ],
-        exclude : `${prebuiltDir}/**`,
-        presets : [
+        babelHelpers: 'bundled',
+        extensions: [...DEFAULT_EXTENSIONS, 'md', 'mdx'],
+        exclude: `${prebuiltDir}/**`,
+        presets: [
           [
             require.resolve('@babel/preset-env'),
             {
-              targets : [
+              targets: [
                 'last 3 Chrome major versions',
                 'last 3 ChromeAndroid major versions',
                 'last 3 Firefox major versions',
@@ -55,63 +54,56 @@ function createRollupConfig({outputDir, indexFilename, indexHTMLString}) {
                 'last 3 iOS major versions',
                 'ie 11',
               ],
-              useBuiltIns : false,
-              shippedProposals : true,
-              modules : false,
-              bugfixes : true,
+              useBuiltIns: false,
+              shippedProposals: true,
+              modules: false,
+              bugfixes: true,
             },
           ],
         ],
-        plugins : [
-          [
-            require.resolve('babel-plugin-bundled-import-meta'),
-            {importStyle : 'baseURI'}
-          ],
+        plugins: [
+          [require.resolve('babel-plugin-bundled-import-meta'), { importStyle: 'baseURI' }],
           [
             require.resolve('babel-plugin-template-html-minifier'),
             {
-              modules : {
-                'lit-html' : [ 'html' ],
-                'lit-element' :
-                    [ 'html', {name : 'css', encapsulation : 'style'} ],
-                '@open-wc/demoing-storybook' :
-                    [ 'html', {name : 'css', encapsulation : 'style'} ],
-                '@open-wc/testing' :
-                    [ 'html', {name : 'css', encapsulation : 'style'} ],
-                '@open-wc/testing-helpers' :
-                    [ 'html', {name : 'css', encapsulation : 'style'} ],
+              modules: {
+                'lit-html': ['html'],
+                'lit-element': ['html', { name: 'css', encapsulation: 'style' }],
+                '@open-wc/demoing-storybook': ['html', { name: 'css', encapsulation: 'style' }],
+                '@open-wc/testing': ['html', { name: 'css', encapsulation: 'style' }],
+                '@open-wc/testing-helpers': ['html', { name: 'css', encapsulation: 'style' }],
               },
-              logOnError : true,
-              failOnError : false,
-              strictCSS : true,
-              htmlMinifier : {
-                collapseWhitespace : true,
-                conservativeCollapse : true,
-                removeComments : true,
-                caseSensitive : true,
-                minifyCSS : true,
+              logOnError: true,
+              failOnError: false,
+              strictCSS: true,
+              htmlMinifier: {
+                collapseWhitespace: true,
+                conservativeCollapse: true,
+                removeComments: true,
+                caseSensitive: true,
+                minifyCSS: true,
               },
             },
           ],
         ],
       }),
       html({
-        name : indexFilename,
-        inputHtml : indexHTMLString,
-        inject : false,
+        name: indexFilename,
+        inputHtml: indexHTMLString,
+        inject: false,
       }),
       polyfillsLoader({
-        polyfills : {
-          coreJs : true,
-          fetch : true,
-          abortController : true,
-          regeneratorRuntime : 'always',
-          webcomponents : true,
-          intersectionObserver : true,
-          resizeObserver : true,
+        polyfills: {
+          coreJs: true,
+          fetch: true,
+          abortController: true,
+          regeneratorRuntime: 'always',
+          webcomponents: true,
+          intersectionObserver: true,
+          resizeObserver: true,
         },
       }),
-      terser({output : {comments : false}}),
+      terser({ output: { comments: false } }),
     ],
   };
 
@@ -120,4 +112,4 @@ function createRollupConfig({outputDir, indexFilename, indexHTMLString}) {
   return config;
 }
 
-module.exports = {createRollupConfig};
+module.exports = { createRollupConfig };

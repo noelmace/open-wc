@@ -1,8 +1,5 @@
-import {createUniqueTag} from './createUniqueTag.js';
-import {
-  addToGlobalTagsCache,
-  getFromGlobalTagsCache
-} from './globalTagsCache.js';
+import { createUniqueTag } from './createUniqueTag.js';
+import { addToGlobalTagsCache, getFromGlobalTagsCache } from './globalTagsCache.js';
 
 /**
  * Checks if klass is a subclass of HTMLElement
@@ -10,8 +7,7 @@ import {
  * @param {typeof HTMLElement} klass
  * @returns {boolean}
  */
-const extendsHTMLElement = klass =>
-    Object.prototype.isPrototypeOf.call(HTMLElement, klass);
+const extendsHTMLElement = klass => Object.prototype.isPrototypeOf.call(HTMLElement, klass);
 
 /**
  * Defines a custom element
@@ -85,9 +81,10 @@ const defineElementAndStoreInCache = (tagName, klass, tagsCache) => {
  * @returns {string}
  */
 export function registerElement(tagName, klass, tagsCache = undefined) {
-  const tag = getFromGlobalTagsCache(klass) ||
-              (tagsCache && tagsCache.get(tagName)) ||
-              defineElementAndStoreInCache(tagName, klass, tagsCache);
+  const tag =
+    getFromGlobalTagsCache(klass) ||
+    (tagsCache && tagsCache.get(tagName)) ||
+    defineElementAndStoreInCache(tagName, klass, tagsCache);
 
   return tag;
 }

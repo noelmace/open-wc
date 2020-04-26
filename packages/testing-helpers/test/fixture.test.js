@@ -1,17 +1,19 @@
 // @ts-ignore
 // @ts-ignore
-import {html as litHtml, LitElement} from 'lit-element';
+import { html as litHtml, LitElement } from 'lit-element';
 import sinon from 'sinon';
 
-import {fixture, fixtureSync} from '../src/fixture.js';
-import {cachedWrappers} from '../src/fixtureWrapper.js';
-import {defineCE} from '../src/helpers.js';
-import {NODE_TYPES} from '../src/lib.js';
-import {html, unsafeStatic} from '../src/lit-html.js';
+import { fixture, fixtureSync } from '../src/fixture.js';
+import { cachedWrappers } from '../src/fixtureWrapper.js';
+import { defineCE } from '../src/helpers.js';
+import { NODE_TYPES } from '../src/lib.js';
+import { html, unsafeStatic } from '../src/lit-html.js';
 
-import {expect} from './setup.js';
+import { expect } from './setup.js';
 
-function createParent() { return document.createElement('my-parent'); }
+function createParent() {
+  return document.createElement('my-parent');
+}
 
 describe('fixtureSync & fixture', () => {
   it('supports strings', async () => {
@@ -24,12 +26,12 @@ describe('fixtureSync & fixture', () => {
 
   it('supports strings with custom parent', async () => {
     const elSync = fixtureSync(`<div foo="${'bar'}"></div>`, {
-      parentNode : createParent(),
+      parentNode: createParent(),
     });
     expect(elSync.parentElement.tagName).to.equal('MY-PARENT');
 
     const elAsync = await fixture(`<div foo="${'bar'}"></div>`, {
-      parentNode : createParent(),
+      parentNode: createParent(),
     });
     expect(elAsync.parentElement.tagName).to.equal('MY-PARENT');
   });
@@ -66,7 +68,9 @@ describe('fixtureSync & fixture', () => {
     /**
      * @param {Element} element
      */
-    function testElement(element) { expect(element.localName).to.equal('div'); }
+    function testElement(element) {
+      expect(element.localName).to.equal('div');
+    }
 
     const elementSync = fixtureSync(html` <div></div> `);
     // @ts-ignore
@@ -79,12 +83,12 @@ describe('fixtureSync & fixture', () => {
 
   it('supports lit-html TemplateResult with custom parent', async () => {
     const elSync = fixtureSync(html` <div foo="${'bar'}"></div> `, {
-      parentNode : createParent(),
+      parentNode: createParent(),
     });
     expect(elSync.parentElement.tagName).to.equal('MY-PARENT');
 
     const elAsync = await fixture(html` <div foo="${'bar'}"></div> `, {
-      parentNode : createParent(),
+      parentNode: createParent(),
     });
     expect(elAsync.parentElement.tagName).to.equal('MY-PARENT');
   });
@@ -157,8 +161,7 @@ describe('fixtureSync & fixture', () => {
         expect(node.nodeType).to.equal(NODE_TYPES.ELEMENT_NODE);
       }
 
-      const elementNodeArray =
-          [ document.createElement('div'), document.createElement('div') ];
+      const elementNodeArray = [document.createElement('div'), document.createElement('div')];
 
       elementNodeArray[0].innerHTML = 'test';
       elementNodeArray[1].innerHTML = 'silently ignored';
@@ -237,7 +240,7 @@ describe('fixtureSync & fixture', () => {
       }
 
       // NB: the 1 is silently ignored
-      const numberArray = [ 0, 1 ];
+      const numberArray = [0, 1];
 
       const numberArraySync = fixtureSync(numberArray);
       doTest(numberArraySync);
@@ -272,7 +275,7 @@ describe('fixtureSync & fixture', () => {
       }
 
       // NB: the `false` is silently ignored
-      const booleanArray = [ true, false ];
+      const booleanArray = [true, false];
 
       const booleanArraySync = fixtureSync(booleanArray);
       doTest(booleanArraySync);
@@ -282,8 +285,9 @@ describe('fixtureSync & fixture', () => {
     });
   });
 
-  it('will cleanup after each test',
-     async () => { expect(cachedWrappers.length).to.equal(0); });
+  it('will cleanup after each test', async () => {
+    expect(cachedWrappers.length).to.equal(0);
+  });
 
   it('waits for updateComplete', async () => {
     let counter = 0;
@@ -291,12 +295,16 @@ describe('fixtureSync & fixture', () => {
     class Test extends HTMLElement {
       constructor() {
         super();
-        this.updateComplete =
-            new Promise(resolve => { this.resolve = resolve; })
-                .then(() => { counter += 1; });
+        this.updateComplete = new Promise(resolve => {
+          this.resolve = resolve;
+        }).then(() => {
+          counter += 1;
+        });
       }
 
-      connectedCallback() { this.resolve(); }
+      connectedCallback() {
+        this.resolve();
+      }
     }
 
     const tag = defineCE(Test);
@@ -313,7 +321,7 @@ describe('fixtureSync & fixture', () => {
     const originalShadyDOM = window.ShadyDOM;
 
     // @ts-ignore
-    window.ShadyDOM = {flush : sinon.spy()};
+    window.ShadyDOM = { flush: sinon.spy() };
 
     class Test extends HTMLElement {}
 
@@ -332,13 +340,20 @@ describe('fixtureSync & fixture', () => {
     class Test extends HTMLElement {
       constructor() {
         super();
-        this.rendered = new Promise(resolve => { this.resolve = resolve; })
-                            .then(() => { counter += 1; });
+        this.rendered = new Promise(resolve => {
+          this.resolve = resolve;
+        }).then(() => {
+          counter += 1;
+        });
       }
 
-      connectedCallback() { this.resolve(); }
+      connectedCallback() {
+        this.resolve();
+      }
 
-      componentOnReady() { return this.rendered; }
+      componentOnReady() {
+        return this.rendered;
+      }
     }
 
     const tag = defineCE(Test);
@@ -354,7 +369,7 @@ describe('fixtureSync & fixture', () => {
     class TestClass extends LitElement {
       static get properties() {
         return {
-          foo : {type : String},
+          foo: { type: String },
         };
       }
 
@@ -372,16 +387,16 @@ describe('fixtureSync & fixture', () => {
     }
 
     const elString = await fixture('<test-class foo="bar"></test-class>', {
-      scopedElements : {
-        'test-class' : TestClass,
+      scopedElements: {
+        'test-class': TestClass,
       },
     });
 
     expect(elString).shadowDom.to.equal('<div>bar</div>');
 
     const elLit = await fixture(html` <test-class foo="bar"></test-class> `, {
-      scopedElements : {
-        'test-class' : TestClass,
+      scopedElements: {
+        'test-class': TestClass,
       },
     });
 

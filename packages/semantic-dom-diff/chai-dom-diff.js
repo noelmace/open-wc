@@ -1,28 +1,28 @@
 /* eslint-disable no-param-reassign */
 
-import {getDiffableHTML, isDiffOptions} from './get-diffable-html.js';
-import {getCleanedShadowDom, getOuterHtml, snapshotPath} from './src/utils.js';
+import { getDiffableHTML, isDiffOptions } from './get-diffable-html.js';
+import { getCleanedShadowDom, getOuterHtml, snapshotPath } from './src/utils.js';
 
 /** @typedef {import('./get-diffable-html.js').DiffOptions} DiffOptions */
 
 function disambiguateArgs(...args) {
   switch (args.length) {
-  // equal<T>(actual: T, expected: T, message?: string, options?: DiffOptions):
-  // void;
-  case 2: {
-    const [message, options] = args;
-    return {message, options};
-  }
+    // equal<T>(actual: T, expected: T, message?: string, options?: DiffOptions):
+    // void;
+    case 2: {
+      const [message, options] = args;
+      return { message, options };
+    }
 
-  // equal<T>(actual: T, expected: T, message?: string): void;
-  // equal<T>(actual: T, expected: T, options?: DiffOptions): void;
-  case 1: {
-    const [first] = args;
-    return isDiffOptions(first) ? {options : first} : {message : first};
-  }
+    // equal<T>(actual: T, expected: T, message?: string): void;
+    // equal<T>(actual: T, expected: T, options?: DiffOptions): void;
+    case 1: {
+      const [first] = args;
+      return isDiffOptions(first) ? { options: first } : { message: first };
+    }
 
-  default:
-    return {};
+    default:
+      return {};
   }
 }
 
@@ -66,10 +66,9 @@ export const chaiDomDiff = (chai, utils) => {
    * @param {[string]|[DiffOptions]|[string, DiffOptions]} rest
    */
   const assertHtmlEquals = (actual, expected, negate, ...rest) => {
-    const {message, options} = disambiguateArgs(...rest);
+    const { message, options } = disambiguateArgs(...rest);
     // use chai's built-in string comparison, log the updated snapshot on error
-    const assertion =
-        new chai.Assertion(getDiffableHTML(actual, options), message);
+    const assertion = new chai.Assertion(getDiffableHTML(actual, options), message);
     const expectedDiffableHTML = getDiffableHTML(expected, options);
 
     if (negate) {
@@ -81,27 +80,29 @@ export const chaiDomDiff = (chai, utils) => {
 
   /** DOM assertion for `should` and `expect` interfaces. */
   const domEquals = _super =>
-      /**
-       * @this {Chai.AssertionStatic}
-       */
-      function
-      handleDom(value, ...args) {
-        if (utils.flag(this, 'lightDom') || utils.flag(this, 'shadowDom') ||
-            utils.flag(this, 'dom')) {
-          let html;
-          if (utils.flag(this, 'lightDom')) {
-            html = getLightDomHtml(this._obj);
-          } else if (utils.flag(this, 'shadowDom')) {
-            html = getShadowDomHtml(this._obj);
-          } else {
-            html = getDomHtml(this._obj);
-          }
-
-          assertHtmlEquals(html, value, utils.flag(this, 'negate'), args[0]);
+    /**
+     * @this {Chai.AssertionStatic}
+     */
+    function handleDom(value, ...args) {
+      if (
+        utils.flag(this, 'lightDom') ||
+        utils.flag(this, 'shadowDom') ||
+        utils.flag(this, 'dom')
+      ) {
+        let html;
+        if (utils.flag(this, 'lightDom')) {
+          html = getLightDomHtml(this._obj);
+        } else if (utils.flag(this, 'shadowDom')) {
+          html = getShadowDomHtml(this._obj);
         } else {
-          _super.apply(this, [ value, ...args ]);
+          html = getDomHtml(this._obj);
         }
-      };
+
+        assertHtmlEquals(html, value, utils.flag(this, 'negate'), args[0]);
+      } else {
+        _super.apply(this, [value, ...args]);
+      }
+    };
 
   chai.Assertion.overwriteMethod('equals', domEquals);
   chai.Assertion.overwriteMethod('equal', domEquals);
@@ -118,8 +119,8 @@ export const chaiDomDiff = (chai, utils) => {
    * @param {[string]|[DiffOptions]|[string, DiffOptions]} rest
    */
   function assertHtmlEqualsSnapshot(actual, negate, ...rest) {
-    const {message, options} = disambiguateArgs(...rest);
-    const {index} = context;
+    const { message, options } = disambiguateArgs(...rest);
+    const { index } = context;
     context.index += 1;
     let path;
 
@@ -139,19 +140,17 @@ export const chaiDomDiff = (chai, utils) => {
       if (!snapshot) {
         snapshotState.set(path, index, html, 'html');
       } else {
-        const isMatch =
-            snapshotState.match(html, getDiffableHTML(snapshot.code, options));
+        const isMatch = snapshotState.match(html, getDiffableHTML(snapshot.code, options));
         if ((isMatch && negate) || (!isMatch && !negate)) {
           /* istanbul ignore next */
           throw new chai.AssertionError(
-              message ||
-                  `Received value does not match stored snapshot ${index}`,
-              {
-                actual : html,
-                expected : snapshot.code,
-                showDiff : true,
-              },
-              chai.util.flag(this, 'ssfi'),
+            message || `Received value does not match stored snapshot ${index}`,
+            {
+              actual: html,
+              expected: snapshot.code,
+              showDiff: true,
+            },
+            chai.util.flag(this, 'ssfi'),
           );
         }
       }
@@ -172,8 +171,7 @@ export const chaiDomDiff = (chai, utils) => {
     } else {
       html = el;
     }
-    return assertHtmlEqualsSnapshot.call(this, html, utils.flag(this, 'negate'),
-                                         options);
+    return assertHtmlEqualsSnapshot.call(this, html, utils.flag(this, 'negate'), options);
   }
 
   utils.addMethod(chai.Assertion.prototype, 'equalSnapshot', equalSnapshot);
@@ -186,13 +184,11 @@ export const chaiDomDiff = (chai, utils) => {
   chai.assert.dom = {
     equal(actualEl, expectedHTML, ...rest) {
       const negate = false;
-      return assertHtmlEquals.call(this, getDomHtml(actualEl), expectedHTML,
-                                   negate, ...rest);
+      return assertHtmlEquals.call(this, getDomHtml(actualEl), expectedHTML, negate, ...rest);
     },
     notEqual(actualEl, expectedHTML, ...rest) {
       const negate = true;
-      return assertHtmlEquals.call(this, getDomHtml(actualEl), expectedHTML,
-                                   negate, ...rest);
+      return assertHtmlEquals.call(this, getDomHtml(actualEl), expectedHTML, negate, ...rest);
     },
     equalSnapshot(actualEl, ...rest) {
       const negate = false;
@@ -208,23 +204,19 @@ export const chaiDomDiff = (chai, utils) => {
   chai.assert.lightDom = {
     equal(actualEl, expectedHTML, ...rest) {
       const negate = false;
-      return assertHtmlEquals.call(this, getLightDomHtml(actualEl),
-                                   expectedHTML, negate, ...rest);
+      return assertHtmlEquals.call(this, getLightDomHtml(actualEl), expectedHTML, negate, ...rest);
     },
     notEqual(actualEl, expectedHTML, ...rest) {
       const negate = true;
-      return assertHtmlEquals.call(this, getLightDomHtml(actualEl),
-                                   expectedHTML, negate, ...rest);
+      return assertHtmlEquals.call(this, getLightDomHtml(actualEl), expectedHTML, negate, ...rest);
     },
     equalSnapshot(actualEl, ...rest) {
       const negate = false;
-      return assertHtmlEqualsSnapshot.call(this, getLightDomHtml(actualEl),
-                                           negate, ...rest);
+      return assertHtmlEqualsSnapshot.call(this, getLightDomHtml(actualEl), negate, ...rest);
     },
     notEqualSnapshot(actualEl, ...rest) {
       const negate = true;
-      return assertHtmlEqualsSnapshot.call(this, getLightDomHtml(actualEl),
-                                           negate, ...rest);
+      return assertHtmlEqualsSnapshot.call(this, getLightDomHtml(actualEl), negate, ...rest);
     },
   };
 
@@ -232,23 +224,19 @@ export const chaiDomDiff = (chai, utils) => {
   chai.assert.shadowDom = {
     equal(actualEl, expectedHTML, ...rest) {
       const negate = false;
-      return assertHtmlEquals.call(this, getShadowDomHtml(actualEl),
-                                   expectedHTML, negate, ...rest);
+      return assertHtmlEquals.call(this, getShadowDomHtml(actualEl), expectedHTML, negate, ...rest);
     },
     notEqual(actualEl, expectedHTML, ...rest) {
       const negate = true;
-      return assertHtmlEquals.call(this, getShadowDomHtml(actualEl),
-                                   expectedHTML, negate, ...rest);
+      return assertHtmlEquals.call(this, getShadowDomHtml(actualEl), expectedHTML, negate, ...rest);
     },
     equalSnapshot(actualEl, ...rest) {
       const negate = false;
-      return assertHtmlEqualsSnapshot.call(this, getShadowDomHtml(actualEl),
-                                           negate, ...rest);
+      return assertHtmlEqualsSnapshot.call(this, getShadowDomHtml(actualEl), negate, ...rest);
     },
     notEqualSnapshot(actualEl, ...rest) {
       const negate = true;
-      return assertHtmlEqualsSnapshot.call(this, getShadowDomHtml(actualEl),
-                                           negate, ...rest);
+      return assertHtmlEqualsSnapshot.call(this, getShadowDomHtml(actualEl), negate, ...rest);
     },
   };
 };
