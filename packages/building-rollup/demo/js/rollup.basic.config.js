@@ -1,11 +1,11 @@
 const deepmerge = require('deepmerge');
-const { createBasicConfig } = require('../../index.js');
+const {createBasicConfig} = require('../../index.js');
 
 const baseConfig = createBasicConfig({
-  legacyBuild: false,
-  developmentMode: false,
+  legacyBuild : false,
+  developmentMode : false,
 });
 
 module.exports = deepmerge(baseConfig, {
-  input: './demo/js/demo-app.js',
+  input : './demo/js/demo-app.js',
 });

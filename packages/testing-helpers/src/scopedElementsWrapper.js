@@ -1,12 +1,15 @@
-import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { html, LitElement, TemplateResult } from 'lit-element';
-import { isIterable } from './lib.js';
+import {ScopedElementsMixin} from '@open-wc/scoped-elements';
+import {html, LitElement, TemplateResult} from 'lit-element';
+import {isIterable} from './lib.js';
 
-/** @typedef {import('@open-wc/scoped-elements').ScopedElementsMap} ScopedElementsMap */
+/**
+ * @typedef {import('@open-wc/scoped-elements').ScopedElementsMap}
+ * ScopedElementsMap
+ */
 
 const transform = template => {
   if (isIterable(template)) {
-    return [...template].map(v => transform(v));
+    return [...template ].map(v => transform(v));
   }
 
   if (template instanceof TemplateResult) {
@@ -16,11 +19,12 @@ const transform = template => {
   return template;
 };
 
-class ScopedElementsTestWrapper extends ScopedElementsMixin(LitElement) {
+class ScopedElementsTestWrapper extends ScopedElementsMixin
+(LitElement) {
   static get properties() {
     return {
-      scopedElements: { type: Object },
-      template: { type: Object },
+      scopedElements : {type : Object},
+      template : {type : Object},
     };
   }
 
@@ -38,17 +42,17 @@ class ScopedElementsTestWrapper extends ScopedElementsMixin(LitElement) {
   firstUpdated(_changed) {
     super.firstUpdated(_changed);
 
-    Object.keys(this.scopedElements).forEach(key =>
-      this.defineScopedElement(key, this.scopedElements[key]),
-    );
+    Object.keys(this.scopedElements)
+        .forEach(
+            key => this.defineScopedElement(key, this.scopedElements[key]),
+        );
   }
 
-  render() {
-    return transform(this.template);
-  }
+  render() { return transform(this.template); }
 }
 
-customElements.define('scoped-elements-test-wrapper', ScopedElementsTestWrapper);
+customElements.define('scoped-elements-test-wrapper',
+                      ScopedElementsTestWrapper);
 
 /**
  * Wraps the template inside a scopedElements component

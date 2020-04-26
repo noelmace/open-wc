@@ -1,10 +1,11 @@
 /* eslint-disable max-classes-per-file */
-import { LoggingMixin } from './LoggingMixin.js';
+import {LoggingMixin} from './LoggingMixin.js';
 
-class Page extends LoggingMixin(HTMLElement) {
+class Page extends LoggingMixin
+(HTMLElement) {
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({mode : 'open'});
     this.name = '';
   }
 
@@ -12,7 +13,8 @@ class Page extends LoggingMixin(HTMLElement) {
     super.connectedCallback();
     this.shadowRoot.innerHTML = `
       <style>
-        :host { display: block; background: ${this.name}; width: 100px; height: 100px; }
+        :host { display: block; background: ${
+        this.name}; width: 100px; height: 100px; }
       </style>
       <div>
         Page ${this.name}
@@ -33,7 +35,8 @@ customElements.define('page-red', PageRed);
 // ****** here we apply the mixin again ******
 //                           |
 //                           v
-class PageGreen extends LoggingMixin(Page) {
+class PageGreen extends LoggingMixin
+(Page) {
   constructor() {
     super();
     this.name = 'Green';

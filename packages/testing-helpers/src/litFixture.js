@@ -1,9 +1,10 @@
-import { TemplateResult } from 'lit-html';
-import { fixtureWrapper } from './fixtureWrapper.js';
-import { render } from './lit-html.js';
-import { elementUpdated } from './elementUpdated.js';
-import { NODE_TYPES } from './lib.js';
-import { getScopedElementsTemplate } from './scopedElementsWrapper.js';
+import {TemplateResult} from 'lit-html';
+
+import {elementUpdated} from './elementUpdated.js';
+import {fixtureWrapper} from './fixtureWrapper.js';
+import {NODE_TYPES} from './lib.js';
+import {render} from './lit-html.js';
+import {getScopedElementsTemplate} from './scopedElementsWrapper.js';
 
 /**
  * @typedef {
@@ -16,19 +17,20 @@ import { getScopedElementsTemplate } from './scopedElementsWrapper.js';
  } LitHTMLRenderable
  */
 
-const isUsefulNode = ({ nodeType, textContent }) => {
+const isUsefulNode = ({nodeType, textContent}) => {
   switch (nodeType) {
-    case NODE_TYPES.COMMENT_NODE:
-      return false;
-    case NODE_TYPES.TEXT_NODE:
-      return textContent.trim();
-    default:
-      return true;
+  case NODE_TYPES.COMMENT_NODE:
+    return false;
+  case NODE_TYPES.TEXT_NODE:
+    return textContent.trim();
+  default:
+    return true;
   }
 };
 
 /**
- * Setups an element synchronously from the provided lit-html template and puts it in the DOM.
+ * Setups an element synchronously from the provided lit-html template and puts
+ * it in the DOM.
  *
  * @template {Element} T - Is an element or a node
  * @param {LitHTMLRenderable} template
@@ -39,8 +41,10 @@ export function litFixtureSync(template, options = {}) {
   const wrapper = fixtureWrapper(options.parentNode);
 
   render(
-    options.scopedElements ? getScopedElementsTemplate(template, options.scopedElements) : template,
-    wrapper,
+      options.scopedElements
+          ? getScopedElementsTemplate(template, options.scopedElements)
+          : template,
+      wrapper,
   );
 
   if (template instanceof TemplateResult) {
@@ -52,7 +56,8 @@ export function litFixtureSync(template, options = {}) {
 }
 
 /**
- * Setups an element asynchronously from the provided lit-html template and puts it in the DOM.
+ * Setups an element asynchronously from the provided lit-html template and puts
+ * it in the DOM.
  *
  * @template {Element} T - Is an element or a node
  * @param {LitHTMLRenderable} template
@@ -61,15 +66,15 @@ export function litFixtureSync(template, options = {}) {
  */
 export async function litFixture(template, options = {}) {
   /** @type {T} */
-  // NB: in the case of scopedElements, this is ScopedElementsTestWrapper, not T,
-  // but that's only a small lie
+  // NB: in the case of scopedElements, this is ScopedElementsTestWrapper, not
+  // T, but that's only a small lie
   const el = litFixtureSync(template, options);
   await elementUpdated(el);
 
   if (options.scopedElements) {
     const [node] =
-      /** @type {T[]} */
-      (Array.from(el.shadowRoot.childNodes).filter(isUsefulNode));
+        /** @type {T[]} */
+        (Array.from(el.shadowRoot.childNodes).filter(isUsefulNode));
     await elementUpdated(node.firstElementChild);
 
     return node;

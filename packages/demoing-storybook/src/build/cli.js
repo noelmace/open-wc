@@ -6,10 +6,10 @@ const readCommandLineArgs = require('./readCommandLineArgs');
   const config = readCommandLineArgs();
 
   await build({
-    storybookConfigDir: config.configDir,
-    storiesPatterns: config.stories,
-    outputDir: config.outputDir,
-    rollupConfigDecorator: config.rollup,
-    addons: config.addons,
+    storybookConfigDir : config.configDir,
+    storiesPatterns : config.stories,
+    outputDir : config.outputDir,
+    rollupConfigDecorator : config.rollup,
+    addons : config.addons,
   });
 })();

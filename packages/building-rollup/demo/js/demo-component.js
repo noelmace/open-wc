@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this, import/no-extraneous-dependencies */
-import { LitElement, html, css } from 'lit-element';
+import {css, html, LitElement} from 'lit-element';
 
 class DemoComponent extends LitElement {
   static get styles() {
@@ -10,9 +10,7 @@ class DemoComponent extends LitElement {
     `;
   }
 
-  render() {
-    return html` <p>Demo component</p> `;
-  }
+  render() { return html` <p>Demo component</p> `; }
 }
 
 customElements.define('demo-component', DemoComponent);

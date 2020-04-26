@@ -1,21 +1,21 @@
 const merge = require('deepmerge');
-const { createSpaConfig } = require('../../index.js');
+const {createSpaConfig} = require('../../index.js');
 
 const baseConfig = createSpaConfig({
-  developmentMode: false,
-  injectServiceWorker: false,
-  legacyBuild: false,
-  babel: {
-    plugins: [
+  developmentMode : false,
+  injectServiceWorker : false,
+  legacyBuild : false,
+  babel : {
+    plugins : [
       [
         'babel-plugin-template-html-minifier',
         {
-          modules: {
-            'lit-html': ['html'],
-            'lit-element': ['html', { name: 'css', encapsulation: 'style' }],
+          modules : {
+            'lit-html' : [ 'html' ],
+            'lit-element' : [ 'html', {name : 'css', encapsulation : 'style'} ],
           },
-          htmlMinifier: {
-            removeComments: false,
+          htmlMinifier : {
+            removeComments : false,
           },
         },
       ],
@@ -24,5 +24,5 @@ const baseConfig = createSpaConfig({
 });
 
 module.exports = merge(baseConfig, {
-  input: 'demo/modify-babel-plugin/index.html',
+  input : 'demo/modify-babel-plugin/index.html',
 });

@@ -1,8 +1,8 @@
 const defaultPolyfills = {
-  fetch: true,
-  abortController: true,
-  coreJs: true,
-  webcomponents: true,
+  fetch : true,
+  abortController : true,
+  coreJs : true,
+  webcomponents : true,
 };
 
-module.exports = { defaultPolyfills };
+module.exports = {defaultPolyfills};

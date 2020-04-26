@@ -21,17 +21,17 @@ function findModernBrowserslist() {
   // for example in .bowerslistrc or the package.json
   const userTargets = browserslist();
 
-  // there is no way to know if browserslist found a user defined configuration, or if it
-  // returns a default list. but we can check if the default list and the list returned from
-  // an empty call are the same
+  // there is no way to know if browserslist found a user defined configuration,
+  // or if it returns a default list. but we can check if the default list and
+  // the list returned from an empty call are the same
   const userHasDefinedTargets =
-    userTargets.length !== browserslistDefaultTargets.length ||
-    userTargets.some(e => !browserslistDefaultTargets.includes(e));
+      userTargets.length !== browserslistDefaultTargets.length ||
+      userTargets.some(e => !browserslistDefaultTargets.includes(e));
 
   if (userHasDefinedTargets && userTargets.includes('ie 11')) {
     throw new Error(
-      'Your browserslist configuration should not include IE 11.\n' +
-        'You can configure rollup to output a separate build for IE 11',
+        'Your browserslist configuration should not include IE 11.\n' +
+            'You can configure rollup to output a separate build for IE 11',
     );
   }
 
@@ -39,4 +39,4 @@ function findModernBrowserslist() {
   return userHasDefinedTargets ? userTargets : browserslist(openWcTargets);
 }
 
-module.exports = { findModernBrowserslist };
+module.exports = {findModernBrowserslist};

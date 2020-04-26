@@ -1,11 +1,12 @@
-import { LitElement, html, css } from 'lit-element';
-import { openWcLogo } from './open-wc-logo.js';
+import {css, html, LitElement} from 'lit-element';
+
+import {openWcLogo} from './open-wc-logo.js';
 
 export class OwcApp extends LitElement {
   static get properties() {
     return {
-      title: { type: String },
-      page: { type: String },
+      title : {type : String},
+      page : {type : String},
     };
   }
 

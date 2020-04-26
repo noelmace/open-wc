@@ -1,7 +1,8 @@
 const merge = require('deepmerge');
-const { createScript } = require('@open-wc/building-utils');
-const { parse, serialize } = require('parse5');
-const { append, predicates, query } = require('@open-wc/building-utils/dom5-fork');
+const {createScript} = require('@open-wc/building-utils');
+const {parse, serialize} = require('parse5');
+const {append, predicates, query} =
+    require('@open-wc/building-utils/dom5-fork');
 const Terser = require('terser');
 
 const isFalsy = _ => !!_;
@@ -11,7 +12,8 @@ function dedupedBabelPlugin(babel, userConfig, defaultConfig) {
     return undefined;
   }
 
-  const config = merge(defaultConfig, typeof userConfig === 'object' ? userConfig : {});
+  const config =
+      merge(defaultConfig, typeof userConfig === 'object' ? userConfig : {});
 
   const newPlugins = [];
   const addedPlugins = new Set();
@@ -33,7 +35,8 @@ function pluginWithOptions(plugin, userConfig, defaultConfig, ...otherParams) {
     return undefined;
   }
 
-  const config = merge(defaultConfig, typeof userConfig === 'object' ? userConfig : {});
+  const config =
+      merge(defaultConfig, typeof userConfig === 'object' ? userConfig : {});
   return plugin(config, ...otherParams);
 }
 
@@ -45,8 +48,9 @@ function applyServiceWorkerRegistration(htmlString) {
   const documentAst = parse(htmlString);
   const body = query(documentAst, predicates.hasTagName('body'));
   const swRegistration = createScript(
-    {},
-    Terser.minify(`
+      {},
+      Terser
+          .minify(`
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
         navigator.serviceWorker

@@ -1,4 +1,4 @@
-import { registerElement } from './registerElement.js';
+import {registerElement} from './registerElement.js';
 
 /**
  * @typedef {import('./types').ScopedElementsMap} ScopedElementsMap
@@ -43,7 +43,8 @@ const matchAll = str => {
 };
 
 /**
- * Transforms a string array into another one with resolved scoped elements and caches it for future references
+ * Transforms a string array into another one with resolved scoped elements and
+ * caches it for future references
  *
  * @param {TemplateStringsArray} strings
  * @param {ScopedElementsMap} scopedElements
@@ -51,32 +52,33 @@ const matchAll = str => {
  * @param {Map<string, string>} tagsCache
  * @returns {TemplateStringsArray}
  */
-const transformTemplate = (strings, scopedElements, templateCache, tagsCache) => {
-  const transformedStrings = strings.map(str => {
-    let acc = str;
-    const matches = matchAll(str);
+const transformTemplate =
+    (strings, scopedElements, templateCache, tagsCache) => {
+      const transformedStrings = strings.map(str => {
+        let acc = str;
+        const matches = matchAll(str);
 
-    for (let i = matches.length - 1; i >= 0; i -= 1) {
-      const item = matches[i];
-      const klass = scopedElements[item[1]];
-      const tag = registerElement(item[1], klass, tagsCache);
-      const start = item.index + item[0].length - item[1].length;
-      const end = start + item[1].length;
+        for (let i = matches.length - 1; i >= 0; i -= 1) {
+          const item = matches[i];
+          const klass = scopedElements[item[1]];
+          const tag = registerElement(item[1], klass, tagsCache);
+          const start = item.index + item[0].length - item[1].length;
+          const end = start + item[1].length;
 
-      acc = acc.slice(0, start) + tag + acc.slice(end);
-    }
+          acc = acc.slice(0, start) + tag + acc.slice(end);
+        }
 
-    return acc;
-  });
+        return acc;
+      });
 
-  // @ts-ignore
-  // noinspection JSCheckFunctionSignatures
-  templateCache.set(strings, transformedStrings);
+      // @ts-ignore
+      // noinspection JSCheckFunctionSignatures
+      templateCache.set(strings, transformedStrings);
 
-  // @ts-ignore
-  // noinspection JSValidateTypes
-  return transformedStrings;
-};
+      // @ts-ignore
+      // noinspection JSValidateTypes
+      return transformedStrings;
+    };
 
 /**
  * Obtains the cached strings array with resolved scoped elements or creates it
@@ -88,9 +90,8 @@ const transformTemplate = (strings, scopedElements, templateCache, tagsCache) =>
  * @param {Map<string, string>} tagsCache
  * @returns {TemplateStringsArray}
  */
-export function transform(strings, scopedElements, templateCache = globalCache, tagsCache) {
-  return (
-    templateCache.get(strings) ||
-    transformTemplate(strings, scopedElements, templateCache, tagsCache)
-  );
+export function transform(strings, scopedElements, templateCache = globalCache,
+                          tagsCache) {
+  return (templateCache.get(strings) ||
+          transformTemplate(strings, scopedElements, templateCache, tagsCache));
 }
