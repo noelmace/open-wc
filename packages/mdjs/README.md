@@ -1,7 +1,7 @@
 # Markdown JavaScript (mdjs) Format
 
-The format is meant to allow using JavaScript with Markdown.
-It does so by "annotating" JavaScript that should be execute in Markdown.
+The format is meant to allow using JavaScript with Markdown. It does so by
+"annotating" JavaScript that should be execute in Markdown.
 
 To annotate we use a code block with `js script`.
 
@@ -13,8 +13,8 @@ To annotate we use a code block with `js script`.
 
 ## Web Components
 
-One very good use case for that can be web components.
-HTML already works in markdown so all you need is to load a web components definition file.
+One very good use case for that can be web components. HTML already works in
+markdown so all you need is to load a web components definition file.
 
 You could even do so within the same markdown file.
 
@@ -42,7 +42,8 @@ mdjs comes with some additional helpers like
 
 ### js story
 
-The code snippet will actually get executed at that place and you will have a live demo
+The code snippet will actually get executed at that place and you will have a
+live demo
 
 ````md
 ```js story
@@ -57,7 +58,9 @@ export const JsStory = () => html` <demo-wc-card>JS Story</demo-wc-card> `;
 export const JsStory = () => {
   const calculateSomething = 12;
   return html`
-    <demo-wc-card .header=${`Something: ${calculateSomething}`}>JS Story</demo-wc-card>
+    <demo-wc-card .header=${`Something: ${calculateSomething}`}
+      >JS Story</demo-wc-card
+    >
   `;
 };
 ```
@@ -102,13 +105,17 @@ Preview your mdjs readme with live demos and auto reload.
 
 ### Storybook
 
-Please check out [@open-wc/demoing-storybook](https://open-wc.org/demoing/) for a fully integrated setup.
+Please check out [@open-wc/demoing-storybook](https://open-wc.org/demoing/) for
+a fully integrated setup.
 
-It includes [storybook-addon-markdown-docs](https://open-wc.org/demoing/storybook-addon-markdown-docs.html) which uses mdjs under the hood.
+It includes
+[storybook-addon-markdown-docs](https://open-wc.org/demoing/storybook-addon-markdown-docs.html)
+which uses mdjs under the hood.
 
 ### Chrome Extension (currently only for Github)
 
-See live demos directly inside github page, markdown files, issues, pull requests...
+See live demos directly inside github page, markdown files, issues, pull
+requests...
 
 Please check out [mdjs-viewer](https://github.com/open-wc/mdjs-viewer).
 
@@ -138,7 +145,8 @@ const page = await mdjsDocPage(markdownString);
 
 #### `mdjsProcess`
 
-Pass in multiple markdown documents and you get back all the jsCode and rendered html.
+Pass in multiple markdown documents and you get back all the jsCode and rendered
+html.
 
 ```js
 const { mdjsProcess } = require('@mdjs/core');
@@ -158,7 +166,8 @@ console.log(data);
 
 ### Advanced
 
-mdjs is build to be integrated within the [unifiedjs](https://unifiedjs.com/) system.
+mdjs is build to be integrated within the [unifiedjs](https://unifiedjs.com/)
+system.
 
 ```js
 const unified = require('unified');

@@ -32,5 +32,6 @@ export const JsStory = () => html` <demo-wc-card>JS Story</demo-wc-card> `;
 with preview
 
 ```js preview-story
-export const JsStory2 = () => html` <demo-wc-card>JS Story with preview</demo-wc-card> `;
+export const JsStory2 = () =>
+  html` <demo-wc-card>JS Story with preview</demo-wc-card> `;
 ```

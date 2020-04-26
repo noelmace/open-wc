@@ -2,10 +2,13 @@
 
 ## Migrating from v0 to v1
 
-- We are using features of rollup v2, make sure to update your version of rollup too.
-- `createCompatibilityConfig` is now a `legacyBuild` option when creating the config
+- We are using features of rollup v2, make sure to update your version of rollup
+  too.
+- `createCompatibilityConfig` is now a `legacyBuild` option when creating the
+  config
 - There is now a separate `createBasicConfig` for JS -> JS bundling
-- When building for legacy browsers, the config is no longer an array. Instead, the `output` option on the config is an array.
+- When building for legacy browsers, the config is no longer an array. Instead,
+  the `output` option on the config is an array.
 
 Before:
 

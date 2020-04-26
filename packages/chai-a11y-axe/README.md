@@ -1,6 +1,7 @@
 # Chai A11y aXe
 
-This module provides a Chai plugin to perform automated accessibility tests via axe.
+This module provides a Chai plugin to perform automated accessibility tests via
+axe.
 
 [//]: # 'AUTO INSERT HEADER PREPUBLISH'
 
@@ -8,9 +9,11 @@ This module provides a Chai plugin to perform automated accessibility tests via 
 
 The BDD UI works with chai's `expect` function.
 
-Because the test is asynchronous, you must either await its result or pass a `done` parameter in the plugin's options object.
+Because the test is asynchronous, you must either await its result or pass a
+`done` parameter in the plugin's options object.
 
-Rules can be ignored by passing `ignoredRules` with a list of ignored rules as a configuration option.
+Rules can be ignored by passing `ignoredRules` with a list of ignored rules as a
+configuration option.
 
 ```js
 import { fixture, expect, html } from '@open-wc/testing';
@@ -43,7 +46,8 @@ it('accepts "done" option', done => {
 
 ## Chai TDD UI
 
-The `isAccessible()` and `isNotAccessible()` methods work on Chai's `assert` function.
+The `isAccessible()` and `isNotAccessible()` methods work on Chai's `assert`
+function.
 
 ```js
 import { fixture, assert, html } from '@open-wc/testing';

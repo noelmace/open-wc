@@ -27,7 +27,8 @@ npm i -D @open-wc/rollup-plugin-html
 
 ### Simple HTML page
 
-When used without any options, the plugin will inject your rollup bundle into a basic HTML page. Useful for developing a simple application.
+When used without any options, the plugin will inject your rollup bundle into a
+basic HTML page. Useful for developing a simple application.
 
 <details>
 
@@ -46,7 +47,10 @@ export default {
 
 ### Input from file
 
-During development, you will probably already have an HTML file which imports your application's modules. You can use this same file as the input of the html plugin, which will bundle any modules inside and output the same HTML minified optimized.
+During development, you will probably already have an HTML file which imports
+your application's modules. You can use this same file as the input of the html
+plugin, which will bundle any modules inside and output the same HTML minified
+optimized.
 
 To do this, you can set the html file as input for rollup:
 
@@ -65,7 +69,8 @@ export default {
 
 </details>
 
-You can also set the `inputPath` property on the html plugin. This is useful if you are generating multiple html files, which each have their own entrypoints:
+You can also set the `inputPath` property on the html plugin. This is useful if
+you are generating multiple html files, which each have their own entrypoints:
 
 <details>
 
@@ -90,7 +95,9 @@ export default {
 
 ### Input from string
 
-Sometimes the HTML you want to use as input is not available on the file system. With the `inputHtml` option you can provide the HTML as a string directly. This is useful for example when using rollup from javascript directly.
+Sometimes the HTML you want to use as input is not available on the file system.
+With the `inputHtml` option you can provide the HTML as a string directly. This
+is useful for example when using rollup from javascript directly.
 
 <details>
 
@@ -112,7 +119,9 @@ export default {
 
 ### Template
 
-With the `template` option, you can let the plugin know where to inject the rollup build into. This option can be a string or an (async) function which returns a string.
+With the `template` option, you can let the plugin know where to inject the
+rollup build into. This option can be a string or an (async) function which
+returns a string.
 
 <details>
 
@@ -163,14 +172,19 @@ export default {
 
 ### Multiple HTML pages
 
-With this plugin, you can generate as many HTML pages as you want. Rollup will efficiently create shared chunks between pages, allowing you to serve from cache between navigations.
+With this plugin, you can generate as many HTML pages as you want. Rollup will
+efficiently create shared chunks between pages, allowing you to serve from cache
+between navigations.
 
 <details>
  <summary>View example</summary>
 
-The easiest way is to have the HTML files with module scripts on disk, for each one you can create an instance of the plugin which will bundle the different entry points automatically share common code.
+The easiest way is to have the HTML files with module scripts on disk, for each
+one you can create an instance of the plugin which will bundle the different
+entry points automatically share common code.
 
-By default, the output filename is taken from the input filename. If you want to create a specific directory structure you need to provide an explicit name:
+By default, the output filename is taken from the input filename. If you want to
+create a specific directory structure you need to provide an explicit name:
 
 ```js
 import html from '@open-wc/rollup-plugin-html';
@@ -204,7 +218,8 @@ export default {
 
 ### Manually inject build output
 
-If you want to control how the build output is injected on the page, disable the `inject` option and use the arguments provided to the template function.
+If you want to control how the build output is injected on the page, disable the
+`inject` option and use the arguments provided to the template function.
 
 <details>
 
@@ -237,7 +252,9 @@ export default {
 };
 ```
 
-When one of the input options is used, the input html is available in the template function. You can use this to inject the bundle into your existing HTML page:
+When one of the input options is used, the input html is available in the
+template function. You can use this to inject the bundle into your existing HTML
+page:
 
 ```js
 import html from '@open-wc/rollup-plugin-html';
@@ -263,9 +280,12 @@ export default {
 
 ### Transform output HTML
 
-You can use the `transform` option to manipulate the output HTML before it's written to disk. This is useful for setting meta tags or environment variables based on input from other sources.
+You can use the `transform` option to manipulate the output HTML before it's
+written to disk. This is useful for setting meta tags or environment variables
+based on input from other sources.
 
-`transform` can be a single function or an array. This makes it easy to compose transformations.
+`transform` can be a single function or an array. This makes it easy to compose
+transformations.
 
 <details>
   <summary>View example</summary>
@@ -305,7 +325,9 @@ export default {
             '<head>',
             `<head>
               <script>
-                window.ENVIRONMENT = "${watchMode ? 'DEVELOPMENT' : 'PRODUCTION'}";
+                window.ENVIRONMENT = "${
+                  watchMode ? 'DEVELOPMENT' : 'PRODUCTION'
+                }";
                 window.APP_VERSION = "${packageJson.version}";
               </script>`,
           ),
@@ -319,7 +341,9 @@ export default {
 
 ### Public path
 
-By default, all imports are made relative to the HTML file and expect files to be in the rollup output directory. With the `publicPath` option you can modify where files from the HTML file are requested from.
+By default, all imports are made relative to the HTML file and expect files to
+be in the rollup output directory. With the `publicPath` option you can modify
+where files from the HTML file are requested from.
 
 <details>
   <summary>View example</summary>
@@ -342,16 +366,21 @@ export default {
 
 ### Multiple build outputs
 
-It is possible to create multiple rollup build outputs and inject both bundles into the same HTML file. This way you can ship multiple bundles to your users, and load the most optimal version for the user's browser.
+It is possible to create multiple rollup build outputs and inject both bundles
+into the same HTML file. This way you can ship multiple bundles to your users,
+and load the most optimal version for the user's browser.
 
 <details>
 <summary>View example</summary>
 
-When you configure rollup to generate multiple build outputs you can inject all outputs into a single HTML file.
+When you configure rollup to generate multiple build outputs you can inject all
+outputs into a single HTML file.
 
-To do this, create one parent `@open-wc/rollup-plugin-html` instance and use `addOutput` to create two child plugins for each separate rollup output.
+To do this, create one parent `@open-wc/rollup-plugin-html` instance and use
+`addOutput` to create two child plugins for each separate rollup output.
 
-Each output defines a unique name, this can be used to retrieve the correct bundle from `bundles` argument when creating the HTML template.
+Each output defines a unique name, this can be used to retrieve the correct
+bundle from `bundles` argument when creating the HTML template.
 
 ```js
 import html from '@open-wc/rollup-plugin-html';
@@ -397,7 +426,8 @@ export default {
 
 </details>
 
-If your outputs use different outputs directories, you need to set the `outputBundleName` option to specify which build to use to output the HTML file.
+If your outputs use different outputs directories, you need to set the
+`outputBundleName` option to specify which build to use to output the HTML file.
 
 <details>
 <summary>View example</summary>
@@ -438,19 +468,22 @@ export default {
 
 ## Configuration options
 
-All configuration options are optional if an option is not set the plugin will fall back to smart defaults. See below example use cases.
+All configuration options are optional if an option is not set the plugin will
+fall back to smart defaults. See below example use cases.
 
 ### name
 
 Type: `string`
 
-Name of the generated HTML file. If `inputPath` is set, defaults to the `inputPath` filename, otherwise defaults to `index.html`.
+Name of the generated HTML file. If `inputPath` is set, defaults to the
+`inputPath` filename, otherwise defaults to `index.html`.
 
 ### inputPath
 
 Type: `string`
 
-Path to the HTML file to use as input. Modules in this file are bundled and the HTML is used as the template for the generated HTML file.
+Path to the HTML file to use as input. Modules in this file are bundled and the
+HTML is used as the template for the generated HTML file.
 
 ### inputHtml
 
@@ -462,39 +495,54 @@ Same as `inputPath`, but provides the HTML as a string directly.
 
 Type: `string`
 
-When using multiple build outputs, this is the name of the build that will be used to emit the generated HTML file.
+When using multiple build outputs, this is the name of the build that will be
+used to emit the generated HTML file.
 
 ### dir
 
 Type: `string`
 
-The directory to output the HTML file into. This defaults to the main output directory of your rollup build. If your build has multiple outputs in different directories, this defaults to the lowest directory on the file system.
+The directory to output the HTML file into. This defaults to the main output
+directory of your rollup build. If your build has multiple outputs in different
+directories, this defaults to the lowest directory on the file system.
 
 ### publicPath
 
 Type: `string`
 
-The public path where static resources are hosted. Any file requests (CSS, js, etc.) from the index.html will be prefixed with the public path.
+The public path where static resources are hosted. Any file requests (CSS, js,
+etc.) from the index.html will be prefixed with the public path.
 
 ### inject
 
 Type: `boolean`
 
-Whether to inject the rollup bundle into the output HTML. If using one of the input options, only the bundled modules in the HTML file are injected. Otherwise, all rollup bundles are injected. Default true. Set this to false if you need to apply some custom logic to how the bundle is injected.
+Whether to inject the rollup bundle into the output HTML. If using one of the
+input options, only the bundled modules in the HTML file are injected.
+Otherwise, all rollup bundles are injected. Default true. Set this to false if
+you need to apply some custom logic to how the bundle is injected.
 
 ### minify
 
 Type: `boolean | object | (html: string) => string | Promise<string>`
 
-When false, does not do any minification. When true, does minification with default settings. When an object, does minification with a custom config. When a function, the function is called with the html and should return the minified html. Defaults to true.
+When false, does not do any minification. When true, does minification with
+default settings. When an object, does minification with a custom config. When a
+function, the function is called with the html and should return the minified
+html. Defaults to true.
 
-Default minification is done using [html-minifier](https://github.com/kangax/html-minifier). When passing an object, the object is given to `html-minifier` directly so you can use any of the regular minify options.
+Default minification is done using
+[html-minifier](https://github.com/kangax/html-minifier). When passing an
+object, the object is given to `html-minifier` directly so you can use any of
+the regular minify options.
 
 ### template
 
 Type: `string | (args: TemplateArgs) => string | Promise<string>`
 
-Template to inject js bundle into. It can be a string or an (async) function. If an input is set, that is used as the default output template. Otherwise defaults to a simple html file.
+Template to inject js bundle into. It can be a string or an (async) function. If
+an input is set, that is used as the default output template. Otherwise defaults
+to a simple html file.
 
 For more info see the [configuration type definitions](#configuration-types).
 
@@ -502,7 +550,8 @@ For more info see the [configuration type definitions](#configuration-types).
 
 Type: `TransformFunction | TransformFunction[]`
 
-TransformFunction: `(html: string, args: TransformArgs) => string | Promise<string>`
+TransformFunction:
+`(html: string, args: TransformArgs) => string | Promise<string>`
 
 Function or array of functions that transform the final HTML output.
 
@@ -570,7 +619,10 @@ export interface TransformArgs {
   bundles: Record<string, EntrypointBundle>;
 }
 
-export type TransformFunction = (html: string, args: TransformArgs) => string | Promise<string>;
+export type TransformFunction = (
+  html: string,
+  args: TransformArgs,
+) => string | Promise<string>;
 
 export type TemplateFunction = (args: TemplateArgs) => string | Promise<string>;
 
