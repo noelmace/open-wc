@@ -1,16 +1,19 @@
 # Linting
 
-Linting can help you write consistent code, and easily prevent mistakes. Open-wc recommends the following tools:
+Linting can help you write consistent code, and easily prevent mistakes. Open-wc
+recommends the following tools:
 
 We recommend
 
 - [ESLint](https://eslint.org/) to lint your es6 code
 - [Prettier](https://prettier.io/) to auto format your code
-- [lint-staged](https://www.npmjs.com/package/lint-staged) to apply linting fixed only to changed files
+- [lint-staged](https://www.npmjs.com/package/lint-staged) to apply linting
+  fixed only to changed files
 
 ## Automated Setup
 
-You can use our scaffoldint to set up a new project, or upgrade an existing project.
+You can use our scaffoldint to set up a new project, or upgrade an existing
+project.
 
 ```bash
 npm init @open-wc
@@ -61,4 +64,5 @@ Run:
 - `npm run lint` to check if any file is correctly formatted
 - `npm run format` to auto format your files
 
-Whenever you create a commit the update files will be auto formatted and the commit message will be linted for you.
+Whenever you create a commit the update files will be auto formatted and the
+commit message will be linted for you.

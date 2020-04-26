@@ -1,6 +1,8 @@
 # Testing with sinon
 
-[Sinon](https://sinonjs.org/) is a library that lets you set up mocks, spies, and stubs in javascript. They ship an es-module version, so it's easy to use it in your tests:
+[Sinon](https://sinonjs.org/) is a library that lets you set up mocks, spies,
+and stubs in javascript. They ship an es-module version, so it's easy to use it
+in your tests:
 
 Add Sinon as a dependency:
 
@@ -43,6 +45,8 @@ class MyComponent extends LitElement {
 customElements.define('my-component', MyComponent);
 ```
 
-See the [sinon documentation](https://sinonjs.org/) to learn how to use the different features.
+See the [sinon documentation](https://sinonjs.org/) to learn how to use the
+different features.
 
-If you run into any problems trying to stub methods on component, please check out the [FAQ](/faq).
+If you run into any problems trying to stub methods on component, please check
+out the [FAQ](/faq).

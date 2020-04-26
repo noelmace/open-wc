@@ -14,11 +14,12 @@ npm i storybook-addon-web-components-knobs @storybook/addon-docs
 
 ### Create API playground
 
-::: tip
-You can find a more interactive version of this in the [withWebComponentsKnobs docs](https://open-wc.org/demoing-storybook/?path=/docs/decorators-withwebcomponentknobs--example-output).
+::: tip You can find a more interactive version of this in the
+[withWebComponentsKnobs docs](https://open-wc.org/demoing-storybook/?path=/docs/decorators-withwebcomponentknobs--example-output).
 :::
 
-Base on the data in [custom-elements.json](./#custom-elementsjson) we can automatically generate knobs for your stories.
+Base on the data in [custom-elements.json](./#custom-elementsjson) we can
+automatically generate knobs for your stories.
 
 To enable this feature you will need to add an additional decorator.
 
@@ -65,13 +66,17 @@ For additional features like
 - syncing components states to knobs
 - Filtering properties and debugging states
 
-please see the official [documentation of the knobs for web components decorator](/demoing-storybook/?path=/docs/decorators-withwebcomponentknobs--example-output).
+please see the official
+[documentation of the knobs for web components decorator](/demoing-storybook/?path=/docs/decorators-withwebcomponentknobs--example-output).
 
 ### custom-elements.json
 
-In order to get documentation for web-components you will need to have a [custom-elements.json](https://github.com/webcomponents/custom-elements-json) file.
-You can hand write it or better generate it. Depending on the web components sugar you are choosing your mileage may vary.
-Please not that the details of the file are still being discussed so we may adopt to changes in `custom-elements.json` without a breaking release.
+In order to get documentation for web-components you will need to have a
+[custom-elements.json](https://github.com/webcomponents/custom-elements-json)
+file. You can hand write it or better generate it. Depending on the web
+components sugar you are choosing your mileage may vary. Please not that the
+details of the file are still being discussed so we may adopt to changes in
+`custom-elements.json` without a breaking release.
 
 Known analyzers that output `custom-elements.json`:
 
@@ -103,7 +108,8 @@ It basically looks like this:
 }
 ```
 
-For a full example see the [./demo/custom-elements.json](./demo/custom-elements.json).
+For a full example see the
+[./demo/custom-elements.json](./demo/custom-elements.json).
 
 <script>
   export default {

@@ -1,11 +1,21 @@
 ```js script
-import { withWebComponentsKnobs, action, withKnobs, text, number, html } from '../../index.js';
+import {
+  withWebComponentsKnobs,
+  action,
+  withKnobs,
+  text,
+  number,
+  html,
+} from '../../index.js';
 
 import '../demo-wc-card.js';
 
 export default {
   title: 'Demo Card/Docs (markdown)',
-  parameters: { component: 'demo-wc-card', options: { selectedPanel: 'storybookjs/knobs/panel' } },
+  parameters: {
+    component: 'demo-wc-card',
+    options: { selectedPanel: 'storybookjs/knobs/panel' },
+  },
 };
 ```
 
@@ -41,8 +51,8 @@ export const Simple = () => html` <demo-wc-card>Hello World</demo-wc-card> `;
 
 ## Playground
 
-For each story you see here you have a menu point on the left.
-Click on canvas and then knobs to see and modify the public api.
+For each story you see here you have a menu point on the left. Click on canvas
+and then knobs to see and modify the public api.
 
 ### Variations
 
@@ -50,14 +60,17 @@ Click on canvas and then knobs to see and modify the public api.
 
 ```js story
 export const CustomHeader = () => html`
-  <demo-wc-card header="Harry Potter">A character that is part of a book series...</demo-wc-card>
+  <demo-wc-card header="Harry Potter"
+    >A character that is part of a book series...</demo-wc-card
+  >
 `;
 ```
 
 ###### Back Side
 
 ```js story
-export const ShowBack = () => html` <demo-wc-card back-side>Hello World</demo-wc-card> `;
+export const ShowBack = () =>
+  html` <demo-wc-card back-side>Hello World</demo-wc-card> `;
 ```
 
 ###### Providing Rows

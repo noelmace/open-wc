@@ -18,7 +18,8 @@ npm i -D @open-wc/semantic-dom-diff
 
 ## Chai Plugin
 
-While `semantic-dom-diff` can be used standalone (see below), it most commonly used as a Chai plugin.
+While `semantic-dom-diff` can be used standalone (see below), it most commonly
+used as a Chai plugin.
 
 <details>
   <summary>Registering the plugin</summary>
@@ -85,7 +86,8 @@ it('my test', async () => {
 
 ### Manual diffing
 
-You can use the chai plugin to manually diff chunks of dom. The dom is diffed semantically: whitespace, newlines, etc. are normalized.
+You can use the chai plugin to manually diff chunks of dom. The dom is diffed
+semantically: whitespace, newlines, etc. are normalized.
 
 ```javascript
 class MyElement extends HTMLElement {
@@ -108,7 +110,9 @@ it('my test', async () => {
     </my-element>
   `);
 
-  expect(el).dom.to.equal('<my-element><div>light dom content</div></my-element>');
+  expect(el).dom.to.equal(
+    '<my-element><div>light dom content</div></my-element>',
+  );
   expect(el).lightDom.to.equal('<div>light dom content</div>');
   expect(el).shadowDom.to.equal('<p>shadow content</p>');
 });
@@ -116,13 +120,18 @@ it('my test', async () => {
 
 ### Snapshot testing
 
-The most powerful feature of `semantic-dom-diff` is the ability to test and manage snapshots of your web components.
+The most powerful feature of `semantic-dom-diff` is the ability to test and
+manage snapshots of your web components.
 
-> If you are not using `@open-wc/testing-karma`, you need to manually install [karma-snapshot](https://www.npmjs.com/package/karma-snapshot) and [karma-mocha-snapshot](https://www.npmjs.com/package/karma-mocha-snapshot).
+> If you are not using `@open-wc/testing-karma`, you need to manually install
+> [karma-snapshot](https://www.npmjs.com/package/karma-snapshot) and
+> [karma-mocha-snapshot](https://www.npmjs.com/package/karma-mocha-snapshot).
 
 #### Setting up a snapshot
 
-Snapshots are created by setting up your component in a specific state, and then calling `.to.equalSnapshot()`. You can use `.dom`, `.lightDom` or `.shadowDom` to set up the dom of your element:
+Snapshots are created by setting up your component in a specific state, and then
+calling `.to.equalSnapshot()`. You can use `.dom`, `.lightDom` or `.shadowDom`
+to set up the dom of your element:
 
 ```js
 import { fixture } from '@open-wc/testing';
@@ -162,23 +171,32 @@ describe('my-message', () => {
 });
 ```
 
-Snapshots are stored in the `__snapshots__` folder in your project, using the most top-level `describe` as the name for your snapshots file.
+Snapshots are stored in the `__snapshots__` folder in your project, using the
+most top-level `describe` as the name for your snapshots file.
 
 #### Updating a snapshot
 
-> If you are not using the standard `@open-wc/testing-karma` configuration, see the documentation of `karma-snapshot` how to pass the update/prune flags.
+> If you are not using the standard `@open-wc/testing-karma` configuration, see
+> the documentation of `karma-snapshot` how to pass the update/prune flags.
 
-When your tests run for the first time the snapshot files are generated. On subsequent test runs your element is compared with the stored snapshots. If the element and the snapshots differ the test fails.
+When your tests run for the first time the snapshot files are generated. On
+subsequent test runs your element is compared with the stored snapshots. If the
+element and the snapshots differ the test fails.
 
-If the difference was an intended change, you can update the snapshots by passing the `--update-snapshots` flag.
+If the difference was an intended change, you can update the snapshots by
+passing the `--update-snapshots` flag.
 
 #### Cleaning up unused snapshots
 
-After refactoring, there might be unused and leftover snapshot files. You can run karma with the `--prune-snapshots` flag to clean these up.
+After refactoring, there might be unused and leftover snapshot files. You can
+run karma with the `--prune-snapshots` flag to clean these up.
 
 **Ignoring tags and attributes**
 
-When working with libraries or custom elements there might be parts of the rendered dom which is random or otherwise outside of your control. In those cases, you might want to ignore certain attributes or tags entirely. This is possible by passing an options object.
+When working with libraries or custom elements there might be parts of the
+rendered dom which is random or otherwise outside of your control. In those
+cases, you might want to ignore certain attributes or tags entirely. This is
+possible by passing an options object.
 
 ```javascript
 it('renders correctly', async () => {
@@ -200,7 +218,8 @@ it('renders correctly', async () => {
 
 **Ignoring an attribute only for certain tags**
 
-Randomly generated ids are often used, throwing off your diffs. You can ignore attributes on specific tags:
+Randomly generated ids are often used, throwing off your diffs. You can ignore
+attributes on specific tags:
 
 ```javascript
 it('renders correctly', async () => {
@@ -245,7 +264,10 @@ it('renders correctly', async () => {
 
 **Ignoring children**
 
-When working with web components you may find that they sometimes render to their light dom, for example, to meet some accessibility requirements. We don't want to ignore the tag completely, as we would then not be able to test if we did render the tag.
+When working with web components you may find that they sometimes render to
+their light dom, for example, to meet some accessibility requirements. We don't
+want to ignore the tag completely, as we would then not be able to test if we
+did render the tag.
 
 We can ignore just it's light dom:
 

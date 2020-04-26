@@ -1,6 +1,10 @@
 # Rollup Plugin Index HTML
 
-> **WARNING**: This project is deprecated and no longer maintained. See [@open-wc/rollup-plugin-html](https://github.com/open-wc/open-wc/tree/master/packages/rollup-plugin-html) and [@open-wc/rollup-plugin-polyfills-loader](https://github.com/open-wc/open-wc/tree/master/packages/rollup-plugin-polyfills-loader) for replacements.
+> **WARNING**: This project is deprecated and no longer maintained. See
+> [@open-wc/rollup-plugin-html](https://github.com/open-wc/open-wc/tree/master/packages/rollup-plugin-html)
+> and
+> [@open-wc/rollup-plugin-polyfills-loader](https://github.com/open-wc/open-wc/tree/master/packages/rollup-plugin-polyfills-loader)
+> for replacements.
 
 Rollup plugin to make rollup understand your index.html.
 
@@ -39,9 +43,11 @@ Rollup plugin to make rollup understand your index.html.
 </html>
 ```
 
-2. Extracts any `<script type="module" src="...">` and feeds them to rollup as entry point(s)
+2. Extracts any `<script type="module" src="...">` and feeds them to rollup as
+   entry point(s)
 
-3. Outputs the same index.html with updated file hashes and all inline HTML, CSS and JS minified:
+3. Outputs the same index.html with updated file hashes and all inline HTML, CSS
+   and JS minified:
 
 ```html
 <html lang="en-GB">
@@ -64,13 +70,16 @@ Rollup plugin to make rollup understand your index.html.
 </html>
 ```
 
-4. Optionally adds a loader script for conditionally loading polyfills and/or a separate build for older browsers.
+4. Optionally adds a loader script for conditionally loading polyfills and/or a
+   separate build for older browsers.
 
-Note that only module scripts with a `src` attribute are used as entrypoints, regular scripts and inline modules are minified but not parsed by rollup.
+Note that only module scripts with a `src` attribute are used as entrypoints,
+regular scripts and inline modules are minified but not parsed by rollup.
 
 ## Usage
 
-To use this plugin, add it to your rollup configuration and set your index.html as entrypoint:
+To use this plugin, add it to your rollup configuration and set your index.html
+as entrypoint:
 
 ```js
 const path = require('path');
@@ -86,11 +95,16 @@ module.exports = {
 
 ### Polyfills
 
-> Note when using `@open-wc/building-rollup` many polyfills are already configured for you.
+> Note when using `@open-wc/building-rollup` many polyfills are already
+> configured for you.
 
-Depending on which browser you need to support you may need to polyfill certain browser features. To keep your bundles small, we don't serve any polyfills by default. You can enable polyfills in the configuration.
+Depending on which browser you need to support you may need to polyfill certain
+browser features. To keep your bundles small, we don't serve any polyfills by
+default. You can enable polyfills in the configuration.
 
-When enabling polyfills a small loader script is injected to your index.html. Polyfills are loaded based on feature detection. This causes a small delay in loading your app. We mediate this by adding a preload link during the build.
+When enabling polyfills a small loader script is injected to your index.html.
+Polyfills are loaded based on feature detection. This causes a small delay in
+loading your app. We mediate this by adding a preload link during the build.
 
 To enable polyfills:
 
@@ -106,9 +120,14 @@ indexHTML({
 });
 ```
 
-`core-js` polyfills many language features such as `Promise`, `Symbol` and `String.prototype.includes`. `regeneratorRuntime` is necessary when you compile `async await` code which is transpiled to javascript ES5. These two polyfills are mainly for supporting legacy browsers. They are only loaded on browsers which don't support modules, such as IE11.
+`core-js` polyfills many language features such as `Promise`, `Symbol` and
+`String.prototype.includes`. `regeneratorRuntime` is necessary when you compile
+`async await` code which is transpiled to javascript ES5. These two polyfills
+are mainly for supporting legacy browsers. They are only loaded on browsers
+which don't support modules, such as IE11.
 
-The rest of the polyfills target specific browser features, see their documentation for more info:
+The rest of the polyfills target specific browser features, see their
+documentation for more info:
 
 - [core-js](https://github.com/zloirock/core-js)
 - [regenerator-runtime](https://github.com/facebook/regenerator/tree/master/packages/regenerator-runtime)
@@ -116,7 +135,8 @@ The rest of the polyfills target specific browser features, see their documentat
 - [fetch](https://github.com/github/fetch)
 - [intersection-observer](https://github.com/w3c/IntersectionObserver)
 
-If you need a polyfill which is not on this list, consider creating an issue so that we can add it. You can also specify custom polyfills:
+If you need a polyfill which is not on this list, consider creating an issue so
+that we can add it. You can also specify custom polyfills:
 
 ```js
 indexHTML({
@@ -131,7 +151,9 @@ indexHTML({
         // path to your polyfill
         path: require.resolve('my-feature-polyfill/dist/bundled.js'),
         // path to the sourcemaps of your polyfill. optional
-        sourcemapPath: require.resolve('my-feature-polyfill/dist/bundled.js.map'),
+        sourcemapPath: require.resolve(
+          'my-feature-polyfill/dist/bundled.js.map',
+        ),
       },
     ],
   },
@@ -140,13 +162,20 @@ indexHTML({
 
 ### Multi (legacy and modern) build
 
-> Note when using `@open-wc/building-rollup/modern-and-legacy-config` the multi build is already configured for you
+> Note when using `@open-wc/building-rollup/modern-and-legacy-config` the multi
+> build is already configured for you
 
-If you need to support non-modern browsers, such IE11 or older versions of chrome, safari and firefox, it's better to create multiple builds of your app.
+If you need to support non-modern browsers, such IE11 or older versions of
+chrome, safari and firefox, it's better to create multiple builds of your app.
 
-You can make one build for modern browsers using modern syntax and features, and one build for legacy browsers compiled to javascript ES5 and with more polyfills loaded. This way you don't penalize all your users for your lowest browser target.
+You can make one build for modern browsers using modern syntax and features, and
+one build for legacy browsers compiled to javascript ES5 and with more polyfills
+loaded. This way you don't penalize all your users for your lowest browser
+target.
 
-To create multiple rollup builds, export an array of rollup configs instead of a single config. Set the `multiBuild` option in both instances of the plugin and set `legacy` option in the legacy build:
+To create multiple rollup builds, export an array of rollup configs instead of a
+single config. Set the `multiBuild` option in both instances of the plugin and
+set `legacy` option in the legacy build:
 
 ```javascript
 const path = require('path');
@@ -186,13 +215,19 @@ module.exports = [
 ];
 ```
 
-For the legacy build you do not need to configure any polyfills, as these are already injected by the modern build.
+For the legacy build you do not need to configure any polyfills, as these are
+already injected by the modern build.
 
-You will probably need to use babel as well to transpile your code to ES5. Remember to change the browser targets for the modern and legacy build accordingly. For example latest 2 of the major browsers for modern and IE11 for the legac build.
+You will probably need to use babel as well to transpile your code to ES5.
+Remember to change the browser targets for the modern and legacy build
+accordingly. For example latest 2 of the major browsers for modern and IE11 for
+the legac build.
 
 ### Minification
 
-We use [html-minifier](https://github.com/kangax/html-minifier) for minifcation with a default configuration. You can adjust this configuration by passing a minify object:
+We use [html-minifier](https://github.com/kangax/html-minifier) for minifcation
+with a default configuration. You can adjust this configuration by passing a
+minify object:
 
 ```js
 indexHTML({
@@ -202,7 +237,9 @@ indexHTML({
 });
 ```
 
-The options object is passed as is to `html-minifier`. See the documentation of [html-minifier](https://github.com/kangax/html-minifier) for all possible minification options.
+The options object is passed as is to `html-minifier`. See the documentation of
+[html-minifier](https://github.com/kangax/html-minifier) for all possible
+minification options.
 
 It is also possible to turn off minification completely by passing minify:
 
@@ -214,7 +251,9 @@ indexHTML({
 
 ### Non index.html entrypoints
 
-You can use this plugin without an index.html plugin if you still want to make use of the polyfilling features. You can do this by adding a custom template function:
+You can use this plugin without an index.html plugin if you still want to make
+use of the polyfilling features. You can do this by adding a custom template
+function:
 
 ```js
 const path = require('path');
@@ -243,7 +282,8 @@ module.exports = {
 
 ### CSP
 
-When loading polyfills we inject a small script in your index.html. If you need CSP you can separate the script in a separate file:
+When loading polyfills we inject a small script in your index.html. If you need
+CSP you can separate the script in a separate file:
 
 ```js
 const path = require('path');
@@ -268,4 +308,5 @@ module.exports = {
 };
 ```
 
-The template function receives the project's `assets` and `entries`. If applicable it also receives the `legacyEntries` and `variation`.
+The template function receives the project's `assets` and `entries`. If
+applicable it also receives the `legacyEntries` and `variation`.

@@ -2,7 +2,8 @@
 
 Use [Prettier](https://prettier.io) to format your JS, CSS and HTML code.
 
-> :Warning: this package is deprecated. We recommend using prettier v2 with the recommend config instead.
+> :Warning: this package is deprecated. We recommend using prettier v2 with the
+> recommend config instead.
 
 ## Setup
 
@@ -37,8 +38,10 @@ npm init @open-wc
 ## What you get
 
 - Apply formatting to JS files
-- Apply formatting to HTML inside of `html` tagged template literals used by [lit-html](https://github.com/Polymer/lit-html)
-- Apply formatting to CSS inside of `css` tagged template literals used by [lit-element](https://lit-element.polymer-project.org/guide/styles#static-styles)
+- Apply formatting to HTML inside of `html` tagged template literals used by
+  [lit-html](https://github.com/Polymer/lit-html)
+- Apply formatting to CSS inside of `css` tagged template literals used by
+  [lit-element](https://lit-element.polymer-project.org/guide/styles#static-styles)
 - Integration with ESLint to prevent potentially conflicting rules
 
 ## Usage

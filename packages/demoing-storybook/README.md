@@ -1,6 +1,7 @@
 # Demoing via storybook
 
-For demoing, documenting and showcasing different states of your Web Component, we recommend using [storybook](https://storybook.js.org/).
+For demoing, documenting and showcasing different states of your Web Component,
+we recommend using [storybook](https://storybook.js.org/).
 
 [//]: # 'AUTO INSERT HEADER PREPUBLISH'
 
@@ -15,8 +16,10 @@ For demoing, documenting and showcasing different states of your Web Component, 
 
 ## Demo
 
-::: tip
-Don't take our word for it but look at [the documentation of a demo card](https://open-wc.org/demoing-storybook/?path=/docs/demo-card-docs--simple) and [the documentation of the knobs decorator](https://open-wc.org/demoing-storybook/?path=/docs/decorators-withwebcomponentknobs--example-output).
+::: tip Don't take our word for it but look at
+[the documentation of a demo card](https://open-wc.org/demoing-storybook/?path=/docs/demo-card-docs--simple)
+and
+[the documentation of the knobs decorator](https://open-wc.org/demoing-storybook/?path=/docs/decorators-withwebcomponentknobs--example-output).
 :::
 
 ## Setup
@@ -29,8 +32,11 @@ npm init @open-wc
 ### Manual
 
 - `yarn add @open-wc/demoing-storybook --dev`
-- Copy at minimum the [.storybook](https://github.com/open-wc/open-wc/tree/master/packages/create/src/generators/demoing-storybook/templates/static/.storybook) folder to `.storybook`
-- If you want to bring along the examples, you may also copy the `stories` folder.
+- Copy at minimum the
+  [.storybook](https://github.com/open-wc/open-wc/tree/master/packages/create/src/generators/demoing-storybook/templates/static/.storybook)
+  folder to `.storybook`
+- If you want to bring along the examples, you may also copy the `stories`
+  folder.
 - Be sure you have a [custom-elements.json](#custom-elements-json) file.
 - Add the following scripts to your package.json
 
@@ -51,7 +57,9 @@ npm run storybook
 
 #### Dev server
 
-The storybook server is based on [es-dev-server](https://open-wc.org/developing/es-dev-server.html) and accepts the same command line args. Check the docs for all available options.
+The storybook server is based on
+[es-dev-server](https://open-wc.org/developing/es-dev-server.html) and accepts
+the same command line args. Check the docs for all available options.
 
 #### Storybook specific
 
@@ -62,7 +70,9 @@ The storybook server is based on [es-dev-server](https://open-wc.org/developing/
 
 ### Configuration file
 
-By default, storybook looks for a config file called `main.js` in your config dir (default `.storybook`). In this file you can configure storybook itself, `es-dev-server` and the `rollup` build configuration.
+By default, storybook looks for a config file called `main.js` in your config
+dir (default `.storybook`). In this file you can configure storybook itself,
+`es-dev-server` and the `rollup` build configuration.
 
 ```js
 module.exports = {
@@ -95,9 +105,11 @@ module.exports = {
 
 ### Create documentation (mdjs)
 
-Create a `*.stories.md` (for example `card.stories.md`) file within the `stories` folder.
+Create a `*.stories.md` (for example `card.stories.md`) file within the
+`stories` folder.
 
-This uses the [Markdown JavaScript (mdjs) Format](https://open-wc.org/mdjs/) via [storybook-addon-markdown-docs](https://open-wc.org/demoing/storybook-addon-markdown-docs.html).
+This uses the [Markdown JavaScript (mdjs) Format](https://open-wc.org/mdjs/) via
+[storybook-addon-markdown-docs](https://open-wc.org/demoing/storybook-addon-markdown-docs.html).
 
 ````md
 ```js script
@@ -112,8 +124,7 @@ export default {
 # Demo Web Component Card
 
 A component meant to display small information with additional data on the back.
-// [...] use markdown to format your text
-// the following demo is inline
+// [...] use markdown to format your text // the following demo is inline
 
 ```js story
 export const Simple = () => html` <demo-wc-card>Hello World</demo-wc-card> `;
@@ -129,7 +140,8 @@ export const Simple = () => html` <demo-wc-card>Hello World</demo-wc-card> `;
 
 ## API
 
-The api table will show the data of "demo-wc-card" in your `custom-elements.json`.
+The api table will show the data of "demo-wc-card" in your
+`custom-elements.json`.
 
 <sb-props of="demo-wc-card"></sb-props>
 
@@ -138,12 +150,12 @@ The api table will show the data of "demo-wc-card" in your `custom-elements.json
 
 ### Create documentation (mdx)
 
-Create a `*.stories.mdx` (for example `card.stories.mdx`) file within the `stories` folder.
+Create a `*.stories.mdx` (for example `card.stories.mdx`) file within the
+`stories` folder.
 
 ```md
-import { Story, Preview, Meta, Props } from '@open-wc/demoing-storybook';
-import { html } from 'lit-html';
-import '../demo-wc-card.js';
+import { Story, Preview, Meta, Props } from '@open-wc/demoing-storybook'; import
+{ html } from 'lit-html'; import '../demo-wc-card.js';
 
 <Meta title="Card|Docs" />
 
@@ -162,7 +174,8 @@ A component meant to display small information with additional data on the back.
 
 ## API
 
-The api table will show the data of "demo-wc-card" in your `custom-elements.json`.
+The api table will show the data of "demo-wc-card" in your
+`custom-elements.json`.
 
 <Props of="demo-wc-card" />
 
@@ -171,7 +184,8 @@ The api table will show the data of "demo-wc-card" in your `custom-elements.json
 
 ### Create stories in CSF (Component story format)
 
-Create a `*.stories.js` (for example `card-variations.stories.js`) file within the `stories` folder.
+Create a `*.stories.js` (for example `card-variations.stories.js`) file within
+the `stories` folder.
 
 ```js
 export default {
@@ -182,7 +196,8 @@ export default {
 export const singleComponent = () => html` <demo-wc-card></demo-wc-card> `;
 ```
 
-For more details see the [official storybook docs](https://storybook.js.org/docs/formats/component-story-format/).
+For more details see the
+[official storybook docs](https://storybook.js.org/docs/formats/component-story-format/).
 
 You can import these templates into any other place if needed.
 
@@ -200,11 +215,12 @@ it('has a header', async () => {
 
 ### Create API playground
 
-::: tip
-You can find a more interactive version of this in the [withWebComponentsKnobs docs](/demoing-storybook/?path=/docs/decorators-withwebcomponentknobs--example-output).
+::: tip You can find a more interactive version of this in the
+[withWebComponentsKnobs docs](/demoing-storybook/?path=/docs/decorators-withwebcomponentknobs--example-output).
 :::
 
-Base on the data in [custom-elements.json](./#custom-elementsjson) we can automatically generate knobs for your stories.
+Base on the data in [custom-elements.json](./#custom-elementsjson) we can
+automatically generate knobs for your stories.
 
 To enable this feature you will need to add an additional decorator.
 
@@ -251,13 +267,17 @@ For additional features like
 - syncing components states to knobs
 - Filtering properties and debugging states
 
-please see the official [documentation of the knobs for web components decorator](/demoing-storybook/?path=/docs/decorators-withwebcomponentknobs--example-output).
+please see the official
+[documentation of the knobs for web components decorator](/demoing-storybook/?path=/docs/decorators-withwebcomponentknobs--example-output).
 
 ### custom-elements.json
 
-In order to get documentation for web-components you will need to have a [custom-elements.json](https://github.com/webcomponents/custom-elements-json) file.
-You can hand write it or better generate it. Depending on the web components sugar you are choosing your mileage may vary.
-Please not that the details of the file are still being discussed so we may adopt to changes in `custom-elements.json` without a breaking release.
+In order to get documentation for web-components you will need to have a
+[custom-elements.json](https://github.com/webcomponents/custom-elements-json)
+file. You can hand write it or better generate it. Depending on the web
+components sugar you are choosing your mileage may vary. Please not that the
+details of the file are still being discussed so we may adopt to changes in
+`custom-elements.json` without a breaking release.
 
 Known analyzers that output `custom-elements.json`:
 
@@ -289,13 +309,18 @@ It basically looks like this:
 }
 ```
 
-For a full example see the [./demo/custom-elements.json](./demo/custom-elements.json).
+For a full example see the
+[./demo/custom-elements.json](./demo/custom-elements.json).
 
 ### Additional middleware config like an api proxy
 
-As we are using [es-dev-server](https://open-wc.org/developing/es-dev-server.html) under the hood you can use all it's power. You can use the regular command line flags, or provide your own config via `start storybook -c /path/to/config.js`.
+As we are using
+[es-dev-server](https://open-wc.org/developing/es-dev-server.html) under the
+hood you can use all it's power. You can use the regular command line flags, or
+provide your own config via `start storybook -c /path/to/config.js`.
 
-To set up a proxy, you can set up a koa middleware. [Read more about koa here.](https://koajs.com/)
+To set up a proxy, you can set up a koa middleware.
+[Read more about koa here.](https://koajs.com/)
 
 ```javascript
 const proxy = require('koa-proxies');

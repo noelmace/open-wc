@@ -10,9 +10,7 @@ Web component project scaffolding.
 npm init @open-wc
 ```
 
-::: warning
-`npm init` requires node 10 & npm 6 or higher
-:::
+::: warning `npm init` requires node 10 & npm 6 or higher :::
 
 This will kickstart a menu guiding you through all available actions.
 
@@ -41,8 +39,8 @@ Our generators are very modular you can pick and choose as you see fit.
 
 ## Scaffold generators
 
-These generators help you kickstart a new app or web component.
-They will create a new folder and set up everything you need to get started immediately.
+These generators help you kickstart a new app or web component. They will create
+a new folder and set up everything you need to get started immediately.
 
 Example usage:
 
@@ -53,18 +51,18 @@ npm init @open-wc
 
 ### Available scaffold generators:
 
-- `Web Component`<br/>
-  This generator scaffolds a starting point for a web component. We recommend using this generator when you want to develop and publish a single web component.
-  <br/>
+- `Web Component`<br/> This generator scaffolds a starting point for a web
+  component. We recommend using this generator when you want to develop and
+  publish a single web component. <br/>
 
-- `Application`<br/>
-  This generator scaffolds a new starter application. We recommend using this generator at the start of your web component project.
+- `Application`<br/> This generator scaffolds a new starter application. We
+  recommend using this generator at the start of your web component project.
   <br/>
 
 ## Features
 
-The above generators are the perfect playgrounds to prototype.
-Add linting, testing, demoing and building whenever the need arises.
+The above generators are the perfect playgrounds to prototype. Add linting,
+testing, demoing and building whenever the need arises.
 
 Example usage:
 
@@ -76,20 +74,15 @@ npm init @open-wc
 
 ### Available Upgrade features
 
-- `Linting`<br>
-  This generator adds a complete linting setup with ESLint, Prettier, Husky and commitlint.
+- `Linting`<br> This generator adds a complete linting setup with ESLint,
+  Prettier, Husky and commitlint. <br/>
+
+- `Testing`<br> This generator adds a complete testing setup with Karma. <br/>
+
+- `Demoing`<br> This generator adds a complete demoing setup with Storybook.
   <br/>
 
-- `Testing`<br>
-  This generator adds a complete testing setup with Karma.
-  <br/>
-
-- `Demoing`<br>
-  This generator adds a complete demoing setup with Storybook.
-  <br/>
-
-- `Building`<br>
-  This generator adds a complete building setup with rollup.
+- `Building`<br> This generator adds a complete building setup with rollup.
   <br/>
 
 <script>
