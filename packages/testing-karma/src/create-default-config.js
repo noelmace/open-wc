@@ -1,8 +1,7 @@
 function getCompatibility() {
   if (process.argv.find(arg => arg.includes('--legacy'))) {
     /* eslint-disable-next-line no-console */
-    console.warn(
-        `testing-karma --legacy flag has been renamed to --compatibility`);
+    console.warn(`testing-karma --legacy flag has been renamed to --compatibility`);
     return 'all';
   }
 
@@ -12,10 +11,8 @@ function getCompatibility() {
 
 const compatibility = getCompatibility();
 const coverage = !!process.argv.find(arg => arg.includes('--coverage'));
-const updateSnapshots =
-    !!process.argv.find(arg => arg.includes('--update-snapshots'));
-const pruneSnapshots =
-    !!process.argv.find(arg => arg.includes('--prune-snapshots'));
+const updateSnapshots = !!process.argv.find(arg => arg.includes('--update-snapshots'));
+const pruneSnapshots = !!process.argv.find(arg => arg.includes('--prune-snapshots'));
 
 /**
  * Creates base karma configuration.
@@ -23,28 +20,28 @@ const pruneSnapshots =
  * @return {import('karma').ConfigOptions}
  */
 module.exports = config => ({
-  browsers : [ 'ChromeHeadlessNoSandbox' ],
+  browsers: ['ChromeHeadlessNoSandbox'],
 
-  files : [
+  files: [
     {
-      pattern : '__snapshots__/**/*.md',
+      pattern: '__snapshots__/**/*.md',
       // snapshot preprocessor will rewrite content of .md files with JS
       // wrappers but karma will try and determine file type based on extension
       // if we do not specify it, so force snapshot files to be js type to avoid
       // karma complaints
-      type : 'js',
+      type: 'js',
     },
     require.resolve('axe-core/axe.min.js'),
   ],
 
-  customLaunchers : {
-    ChromeHeadlessNoSandbox : {
-      base : 'ChromeHeadless',
-      flags : [ '--no-sandbox', '--disable-setuid-sandbox' ],
+  customLaunchers: {
+    ChromeHeadlessNoSandbox: {
+      base: 'ChromeHeadless',
+      flags: ['--no-sandbox', '--disable-setuid-sandbox'],
     },
   },
 
-  plugins : [
+  plugins: [
     // resolve plugins relative to this config so that they don't always need to
     // exist at the top level
     require.resolve('@open-wc/karma-esm'),
@@ -60,14 +57,13 @@ module.exports = config => ({
     'karma-*',
   ],
 
-  frameworks :
-      [ 'esm', 'mocha', 'snapshot', 'mocha-snapshot', 'source-map-support' ],
+  frameworks: ['esm', 'mocha', 'snapshot', 'mocha-snapshot', 'source-map-support'],
 
-  esm : {
+  esm: {
     coverage,
     compatibility,
     // prevent compiling es5 libs
-    babelExclude : [
+    babelExclude: [
       '**/node_modules/mocha/**/*',
       '**/node_modules/chai/**/*',
       '**/node_modules/sinon-chai/**/*',
@@ -75,64 +71,63 @@ module.exports = config => ({
       '**/node_modules/core-js-bundle/**/*',
     ],
     // sinon is not completely es5...
-    babelModernExclude : [ '**/node_modules/sinon/**/*' ],
+    babelModernExclude: ['**/node_modules/sinon/**/*'],
     // prevent compiling non-module libs
-    babelModuleExclude :
-        [ '**/node_modules/mocha/**/*', '**/node_modules/core-js-bundle/**/*' ],
-    exclude : [ '**/__snapshots__/**/*' ],
+    babelModuleExclude: ['**/node_modules/mocha/**/*', '**/node_modules/core-js-bundle/**/*'],
+    exclude: ['**/__snapshots__/**/*'],
   },
 
-  preprocessors : {
-    '**/__snapshots__/**/*.md' : [ 'snapshot' ],
+  preprocessors: {
+    '**/__snapshots__/**/*.md': ['snapshot'],
   },
 
-  reporters : coverage ? [ 'mocha', 'coverage-istanbul' ] : [ 'mocha' ],
+  reporters: coverage ? ['mocha', 'coverage-istanbul'] : ['mocha'],
 
-  mochaReporter : {
-    showDiff : true,
+  mochaReporter: {
+    showDiff: true,
   },
 
-  restartOnFileChange : true,
+  restartOnFileChange: true,
 
-  client : {
-    mocha : {
-      reporter : 'html',
+  client: {
+    mocha: {
+      reporter: 'html',
     },
   },
 
-  colors : true,
+  colors: true,
 
   // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO ||
   // LOG_DEBUG
-  logLevel : config.LOG_INFO,
+  logLevel: config.LOG_INFO,
 
   // ## code coverage config
-  coverageIstanbulReporter : {
-    reports : [ 'html', 'lcovonly', 'text-summary' ],
-    dir : 'coverage',
-    combineBrowserReports : true,
-    skipFilesWithNoCoverage : false,
-    thresholds : {
-      global : {
-        statements : 80,
-        branches : 80,
-        functions : 80,
-        lines : 80,
+  coverageIstanbulReporter: {
+    reports: ['html', 'lcovonly', 'text-summary'],
+    dir: 'coverage',
+    combineBrowserReports: true,
+    skipFilesWithNoCoverage: false,
+    thresholds: {
+      global: {
+        statements: 80,
+        branches: 80,
+        functions: 80,
+        lines: 80,
       },
     },
   },
 
-  snapshot : {
-    update : updateSnapshots,
-    prune : pruneSnapshots,
+  snapshot: {
+    update: updateSnapshots,
+    prune: pruneSnapshots,
     // only warn about unused snapshots when running all tests
-    limitUnusedSnapshotsInWarning : config.grep ? 0 : -1,
-    pathResolver(
-        basePath,
-        suiteName) { return `${basePath}/__snapshots__/${suiteName}.md`; },
+    limitUnusedSnapshotsInWarning: config.grep ? 0 : -1,
+    pathResolver(basePath, suiteName) {
+      return `${basePath}/__snapshots__/${suiteName}.md`;
+    },
   },
 
-  autoWatch : false,
-  singleRun : true,
-  concurrency : Infinity,
+  autoWatch: false,
+  singleRun: true,
+  concurrency: Infinity,
 });

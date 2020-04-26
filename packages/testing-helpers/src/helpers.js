@@ -29,8 +29,7 @@ export function defineCE(klass) {
  * @returns {boolean}
  */
 export function isIE() {
-  return !!navigator.userAgent.match(/Trident/g) ||
-         !!navigator.userAgent.match(/MSIE/g);
+  return !!navigator.userAgent.match(/Trident/g) || !!navigator.userAgent.match(/MSIE/g);
 }
 
 /**
@@ -43,7 +42,9 @@ export function isIE() {
  * @returns {Promise<void>} Promise to await until time is up
  */
 export function aTimeout(ms) {
-  return new Promise(resolve => { setTimeout(resolve, ms); });
+  return new Promise(resolve => {
+    setTimeout(resolve, ms);
+  });
 }
 
 /**
@@ -157,15 +158,14 @@ export function oneEvent(eventTarget, eventName) {
  *     polling interval
  */
 export function waitUntil(predicate, message, options = {}) {
-  const {interval = 50, timeout = 2000} = options;
+  const { interval = 50, timeout = 2000 } = options;
 
   return new Promise((resolve, reject) => {
     let timeoutId;
 
     setTimeout(() => {
       clearTimeout(timeoutId);
-      reject(
-          new Error(message ? `Timeout: ${message}` : 'waitUntil timed out'));
+      reject(new Error(message ? `Timeout: ${message}` : 'waitUntil timed out'));
     }, timeout);
 
     async function nextInterval() {
@@ -173,7 +173,9 @@ export function waitUntil(predicate, message, options = {}) {
         if (await predicate()) {
           resolve();
         } else {
-          timeoutId = setTimeout(() => { nextInterval(); }, interval);
+          timeoutId = setTimeout(() => {
+            nextInterval();
+          }, interval);
         }
       } catch (error) {
         reject(error);
