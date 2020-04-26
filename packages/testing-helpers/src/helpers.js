@@ -12,7 +12,8 @@ let defineCECounter = 0;
  * // test el
  *
  * @template {HTMLElement} T
- * @param {import("@open-wc/dedupe-mixin").Constructor<T>} klass Class which extends HTMLElement
+ * @param {import("@open-wc/dedupe-mixin").Constructor<T>} klass Class which
+ *     extends HTMLElement
  * @returns {string} Tag name of the registered element
  */
 export function defineCE(klass) {
@@ -28,7 +29,8 @@ export function defineCE(klass) {
  * @returns {boolean}
  */
 export function isIE() {
-  return !!navigator.userAgent.match(/Trident/g) || !!navigator.userAgent.match(/MSIE/g);
+  return !!navigator.userAgent.match(/Trident/g) ||
+         !!navigator.userAgent.match(/MSIE/g);
 }
 
 /**
@@ -41,9 +43,7 @@ export function isIE() {
  * @returns {Promise<void>} Promise to await until time is up
  */
 export function aTimeout(ms) {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms);
-  });
+  return new Promise(resolve => { setTimeout(resolve, ms); });
 }
 
 /**
@@ -120,7 +120,8 @@ export async function triggerFocusFor(element) {
  *
  * @param {EventTarget} eventTarget Target of the event, usually an Element
  * @param {string} eventName Name of the event
- * @returns {Promise<CustomEvent>} Promise to await until the event has been fired
+ * @returns {Promise<CustomEvent>} Promise to await until the event has been
+ *     fired
  */
 export function oneEvent(eventTarget, eventName) {
   return new Promise(resolve => {
@@ -133,8 +134,9 @@ export function oneEvent(eventTarget, eventName) {
 }
 
 /**
- * Waits until the given predicate returns a truthy value. Calls and awaits the predicate
- * function at the given interval time. Can be used to poll until a certain condition is true.
+ * Waits until the given predicate returns a truthy value. Calls and awaits the
+ * predicate function at the given interval time. Can be used to poll until a
+ * certain condition is true.
  *
  * @example
  * ```js
@@ -142,23 +144,28 @@ export function oneEvent(eventTarget, eventName) {
  *
  * const element = await fixture(html`<my-element></my-element>`);
  *
- * await waitUntil(() => element.someAsyncProperty, 'element should become ready');
+ * await waitUntil(() => element.someAsyncProperty, 'element should become
+ * ready');
  * ```
  *
- * @param {() => boolean | Promise<boolean>} predicate - predicate function which is called each poll interval.
+ * @param {() => boolean | Promise<boolean>} predicate - predicate function
+ *     which is called each poll interval.
  *   The predicate is awaited, so it can return a promise.
- * @param {string} [message] an optional message to display when the condition timed out
- * @param {{ interval?: number, timeout?: number }} [options] timeout and polling interval
+ * @param {string} [message] an optional message to display when the condition
+ *     timed out
+ * @param {{ interval?: number, timeout?: number }} [options] timeout and
+ *     polling interval
  */
 export function waitUntil(predicate, message, options = {}) {
-  const { interval = 50, timeout = 2000 } = options;
+  const {interval = 50, timeout = 2000} = options;
 
   return new Promise((resolve, reject) => {
     let timeoutId;
 
     setTimeout(() => {
       clearTimeout(timeoutId);
-      reject(new Error(message ? `Timeout: ${message}` : 'waitUntil timed out'));
+      reject(
+          new Error(message ? `Timeout: ${message}` : 'waitUntil timed out'));
     }, timeout);
 
     async function nextInterval() {
@@ -166,9 +173,7 @@ export function waitUntil(predicate, message, options = {}) {
         if (await predicate()) {
           resolve();
         } else {
-          timeoutId = setTimeout(() => {
-            nextInterval();
-          }, interval);
+          timeoutId = setTimeout(() => { nextInterval(); }, interval);
         }
       } catch (error) {
         reject(error);

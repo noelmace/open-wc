@@ -17,7 +17,8 @@ const deepmerge = require('deepmerge');
  * @property {string[]} [babelModernExclude]
  * @property {string[]} [babelModuleExclude]
  * @property {boolean} [preserveSymlinks]
- * @property {Partial<import('polyfills-loader').PolyfillsLoaderConfig>} [polyfillsLoader]
+ * @property {Partial<import('polyfills-loader').PolyfillsLoaderConfig>}
+ * [polyfillsLoader]
  */
 
 function createEsmConfig(karmaConfig) {
@@ -28,7 +29,8 @@ function createEsmConfig(karmaConfig) {
     esmConfig.exclude = [];
   }
 
-  // the option used to be called `customBabelConfig`, remain backwards compatible for now
+  // the option used to be called `customBabelConfig`, remain backwards
+  // compatible for now
   // @ts-ignore
   let babelConfig = esmConfig.babelConfig || esmConfig.customBabelConfig;
 
@@ -37,18 +39,21 @@ function createEsmConfig(karmaConfig) {
     async function log404(ctx, next) {
       await next();
       if (ctx.status === 404 && path.extname(ctx.url)) {
-        console.warn(`[karma-esm]: Could not find requested file: ${ctx.url}`); // eslint-disable-line no-console
+        console.warn(`[karma-esm]: Could not find requested file: ${
+            ctx.url}`); // eslint-disable-line no-console
       }
     },
   ];
 
   // exclude regular test scripts/libs from babel
-  const karmaLibs = karmaConfig.files
-    .filter(f => f.pattern.endsWith('.js') && f.type !== 'module')
-    .map(f => f.pattern);
+  const karmaLibs =
+      karmaConfig.files
+          .filter(f => f.pattern.endsWith('.js') && f.type !== 'module')
+          .map(f => f.pattern);
 
-  esmConfig.babelExclude = [...(esmConfig.babelExclude || []), ...karmaLibs];
-  esmConfig.babelModuleExclude = [...(esmConfig.babelModuleExclude || []), ...karmaLibs];
+  esmConfig.babelExclude = [...(esmConfig.babelExclude || []), ...karmaLibs ];
+  esmConfig.babelModuleExclude =
+      [...(esmConfig.babelModuleExclude || []), ...karmaLibs ];
 
   if (esmConfig.coverage) {
     const coverageExclude = [
@@ -67,21 +72,22 @@ function createEsmConfig(karmaConfig) {
     // if we are only running babel for coverage, exclude none-instrumented
     // files from babel to save computation time
     if (!babelConfig && !esmConfig.babel) {
-      esmConfig.babelModernExclude = [...(esmConfig.babelModernExclude || []), ...coverageExclude];
+      esmConfig.babelModernExclude =
+          [...(esmConfig.babelModernExclude || []), ...coverageExclude ];
     }
 
     babelConfig = deepmerge(
-      {
-        plugins: [
-          [
-            require.resolve('babel-plugin-istanbul'),
-            {
-              exclude: coverageExclude,
-            },
+        {
+          plugins : [
+            [
+              require.resolve('babel-plugin-istanbul'),
+              {
+                exclude : coverageExclude,
+              },
+            ],
           ],
-        ],
-      },
-      babelConfig || {},
+        },
+        babelConfig || {},
     );
   }
 
