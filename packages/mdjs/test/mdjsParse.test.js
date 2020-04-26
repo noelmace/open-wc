@@ -3,9 +3,9 @@ const markdown = require('remark-parse');
 const html = require('remark-html');
 
 const chai = require('chai');
-const {mdjsParse} = require('../src/mdjsParse.js');
+const { mdjsParse } = require('../src/mdjsParse.js');
 
-const {expect} = chai;
+const { expect } = chai;
 
 describe('mdjsParse', () => {
   it('extracts only "js script" code blocks', async () => {
@@ -20,10 +20,9 @@ describe('mdjsParse', () => {
     ].join('\n');
     const parser = unified().use(markdown).use(mdjsParse).use(html);
     const result = await parser.process(input);
-    expect(result.contents)
-        .to.equal(
-            '<h2>Intro</h2>\n<pre><code class="language-js">const foo = 1;\n</code></pre>\n',
-        );
+    expect(result.contents).to.equal(
+      '<h2>Intro</h2>\n<pre><code class="language-js">const foo = 1;\n</code></pre>\n',
+    );
     // @ts-ignore
     expect(result.data.jsCode).to.equal('const bar = 22;');
   });

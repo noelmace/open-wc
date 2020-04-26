@@ -1,28 +1,25 @@
-import {BuildingRollupMixin} from '../building-rollup/index.js';
+import { BuildingRollupMixin } from '../building-rollup/index.js';
 import {
   DemoingStorybookMixin,
   DemoingStorybookScaffoldMixin,
 } from '../demoing-storybook/index.js';
-import {LintingMixin} from '../linting/index.js';
-import {TestingMixin, TestingScaffoldMixin} from '../testing/index.js';
-import {
-  WcLitElementMixin,
-  WcLitElementPackageMixin
-} from '../wc-lit-element/index.js';
+import { LintingMixin } from '../linting/index.js';
+import { TestingMixin, TestingScaffoldMixin } from '../testing/index.js';
+import { WcLitElementMixin, WcLitElementPackageMixin } from '../wc-lit-element/index.js';
 
 export function gatherMixins(options) {
   let considerScaffoldFilesFor = false;
   const mixins = [];
   if (options.type === 'scaffold') {
     switch (options.scaffoldType) {
-    case 'wc':
-      mixins.push(WcLitElementPackageMixin);
-      considerScaffoldFilesFor = true;
-      break;
-    case 'wc-lit-element':
-      mixins.push(WcLitElementMixin);
-      considerScaffoldFilesFor = true;
-      break;
+      case 'wc':
+        mixins.push(WcLitElementPackageMixin);
+        considerScaffoldFilesFor = true;
+        break;
+      case 'wc-lit-element':
+        mixins.push(WcLitElementMixin);
+        considerScaffoldFilesFor = true;
+        break;
       // no default
     }
   }
@@ -44,16 +41,15 @@ export function gatherMixins(options) {
     });
   }
 
-  if (considerScaffoldFilesFor && options.scaffoldFilesFor &&
-      options.scaffoldFilesFor.length > 0) {
+  if (considerScaffoldFilesFor && options.scaffoldFilesFor && options.scaffoldFilesFor.length > 0) {
     options.scaffoldFilesFor.forEach(feature => {
       switch (feature) {
-      case 'testing':
-        mixins.push(TestingScaffoldMixin);
-        break;
-      case 'demoing':
-        mixins.push(DemoingStorybookScaffoldMixin);
-        break;
+        case 'testing':
+          mixins.push(TestingScaffoldMixin);
+          break;
+        case 'demoing':
+          mixins.push(DemoingStorybookScaffoldMixin);
+          break;
         // no default
       }
     });

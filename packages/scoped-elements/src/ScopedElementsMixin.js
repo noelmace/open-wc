@@ -1,10 +1,10 @@
 /* eslint-disable no-use-before-define */
-import {dedupeMixin} from '@open-wc/dedupe-mixin';
-import {TemplateResult} from 'lit-html';
+import { dedupeMixin } from '@open-wc/dedupe-mixin';
+import { TemplateResult } from 'lit-html';
 
-import {defineScopedElement, registerElement} from './registerElement.js';
-import {shadyTemplateFactory} from './shadyTemplateFactory.js';
-import {transform} from './transform.js';
+import { defineScopedElement, registerElement } from './registerElement.js';
+import { shadyTemplateFactory } from './shadyTemplateFactory.js';
+import { transform } from './transform.js';
 
 /**
  * @typedef {import('./types').ScopedElementsMixin} ScopedElementsMixin
@@ -67,18 +67,18 @@ const getTagsCache = key => {
  * @param {Map<string, string>} tagsCache
  * @returns {ReadonlyArray}
  */
-const transformArray = (items, scopedElements, templateCache,
-                        tagsCache) => items.map(value => {
-  if (value instanceof TemplateResult) {
-    return transformTemplate(value, scopedElements, templateCache, tagsCache);
-  }
+const transformArray = (items, scopedElements, templateCache, tagsCache) =>
+  items.map(value => {
+    if (value instanceof TemplateResult) {
+      return transformTemplate(value, scopedElements, templateCache, tagsCache);
+    }
 
-  if (Array.isArray(value)) {
-    return transformArray(value, scopedElements, templateCache, tagsCache);
-  }
+    if (Array.isArray(value)) {
+      return transformArray(value, scopedElements, templateCache, tagsCache);
+    }
 
-  return value;
-});
+    return value;
+  });
 
 /**
  * Transforms a TemplateResult into another one with resolved scoped elements
@@ -89,14 +89,13 @@ const transformArray = (items, scopedElements, templateCache,
  * @param {Map<string, string>} tagsCache
  * @returns {TemplateResult}
  */
-const transformTemplate =
-    (template, scopedElements, templateCache, tagsCache) => new TemplateResult(
-        transform(template.strings, scopedElements, templateCache, tagsCache),
-        transformArray(template.values, scopedElements, templateCache,
-                       tagsCache),
-        template.type,
-        template.processor,
-    );
+const transformTemplate = (template, scopedElements, templateCache, tagsCache) =>
+  new TemplateResult(
+    transform(template.strings, scopedElements, templateCache, tagsCache),
+    transformArray(template.values, scopedElements, templateCache, tagsCache),
+    template.type,
+    template.processor,
+  );
 
 /**
  * Gets an instance of the ScopedElementsTemplateFactory
@@ -108,72 +107,73 @@ const transformTemplate =
  * @returns {function(any): any}
  */
 const scopedElementsTemplateFactory = (
-    scopeName,
-    scopedElements,
-    templateCache,
-    tagsCache,
-    ) => template => {
-  const newTemplate =
-      transformTemplate(template, scopedElements, templateCache, tagsCache);
+  scopeName,
+  scopedElements,
+  templateCache,
+  tagsCache,
+) => template => {
+  const newTemplate = transformTemplate(template, scopedElements, templateCache, tagsCache);
 
   return shadyTemplateFactory(scopeName)(newTemplate);
 };
 
 /** @type {ScopedElementsMixin} */
 const ScopedElementsMixinImplementation = superclass =>
-    class ScopedElementsHost extends superclass {
-  /**
-   * Obtains the scoped elements definitions map
-   *
-   * @returns {ScopedElementsMap}
-   */
-  static get scopedElements() { return {}; }
-
-  /** @override */
-  static render(template, container, options) {
-    if (!options || typeof options !== 'object' || !options.scopeName) {
-      throw new Error('The `scopeName` option is required.');
+  class ScopedElementsHost extends superclass {
+    /**
+     * Obtains the scoped elements definitions map
+     *
+     * @returns {ScopedElementsMap}
+     */
+    static get scopedElements() {
+      return {};
     }
-    const {scopeName} = options;
 
-    const templateCache = getTemplateCache(this);
-    const tagsCache = getTagsCache(this);
-    const {scopedElements} = this;
+    /** @override */
+    static render(template, container, options) {
+      if (!options || typeof options !== 'object' || !options.scopeName) {
+        throw new Error('The `scopeName` option is required.');
+      }
+      const { scopeName } = options;
 
-    return super.render(template, container, {
-      ...options,
-      templateFactory : scopedElementsTemplateFactory(
+      const templateCache = getTemplateCache(this);
+      const tagsCache = getTagsCache(this);
+      const { scopedElements } = this;
+
+      return super.render(template, container, {
+        ...options,
+        templateFactory: scopedElementsTemplateFactory(
           scopeName,
           scopedElements,
           templateCache,
           tagsCache,
-          ),
-    });
-  }
+        ),
+      });
+    }
 
-  /**
-   * Defines a scoped element
-   *
-   * @param {string} tagName
-   * @param {typeof HTMLElement} klass
-   */
-  defineScopedElement(tagName, klass) {
-    return defineScopedElement(tagName, klass, getTagsCache(this.constructor));
-  }
+    /**
+     * Defines a scoped element
+     *
+     * @param {string} tagName
+     * @param {typeof HTMLElement} klass
+     */
+    defineScopedElement(tagName, klass) {
+      return defineScopedElement(tagName, klass, getTagsCache(this.constructor));
+    }
 
-  /**
-   * Returns a scoped tag name
-   *
-   * @param {string} tagName
-   * @returns {string|undefined}
-   */
-  static getScopedTagName(tagName) {
-    const klass = this.scopedElements[tagName];
+    /**
+     * Returns a scoped tag name
+     *
+     * @param {string} tagName
+     * @returns {string|undefined}
+     */
+    static getScopedTagName(tagName) {
+      const klass = this.scopedElements[tagName];
 
-    return klass ? registerElement(tagName, klass, getTagsCache(this))
-                 : getTagsCache(this).get(tagName);
-  }
-};
+      return klass
+        ? registerElement(tagName, klass, getTagsCache(this))
+        : getTagsCache(this).get(tagName);
+    }
+  };
 
-export const ScopedElementsMixin =
-    dedupeMixin(ScopedElementsMixinImplementation);
+export const ScopedElementsMixin = dedupeMixin(ScopedElementsMixinImplementation);

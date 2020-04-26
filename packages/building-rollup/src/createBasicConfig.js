@@ -2,7 +2,7 @@
 
 /* eslint-disable no-param-reassign */
 const resolve = require('@rollup/plugin-node-resolve');
-const {terser} = require('rollup-plugin-terser');
+const { terser } = require('rollup-plugin-terser');
 const babel = require('rollup-plugin-babel');
 const merge = require('deepmerge');
 const {
@@ -11,60 +11,57 @@ const {
   babelConfigLegacyRollupGenerate,
   babelConfigSystemJs,
 } = require('./babel/babel-configs');
-const {bundledBabelHelpers} =
-    require('./babel/rollup-plugin-bundled-babel-helpers');
-const {isFalsy, pluginWithOptions, dedupedBabelPlugin} = require('./utils');
+const { bundledBabelHelpers } = require('./babel/rollup-plugin-bundled-babel-helpers');
+const { isFalsy, pluginWithOptions, dedupedBabelPlugin } = require('./utils');
 
 /**
  * @param {BasicOptions} userOptions
  */
 function createBasicConfig(userOptions = {}) {
   const opts = merge(
-      {
-        developmentMode : !!process.env.ROLLUP_WATCH,
-        outputDir : 'dist',
-        nodeResolve : true,
-        babel : true,
-        terser : true,
-      },
-      userOptions,
+    {
+      developmentMode: !!process.env.ROLLUP_WATCH,
+      outputDir: 'dist',
+      nodeResolve: true,
+      babel: true,
+      terser: true,
+    },
+    userOptions,
   );
-  const {developmentMode} = userOptions;
+  const { developmentMode } = userOptions;
   const fileName = `[${developmentMode ? 'name' : 'hash'}].js`;
   const assetName = `[${developmentMode ? 'name' : 'hash'}][extname]`;
 
   const config = {
-    preserveEntrySignatures : false,
-    treeshake : !developmentMode,
+    preserveEntrySignatures: false,
+    treeshake: !developmentMode,
 
-    output : {
-      entryFileNames : fileName,
-      chunkFileNames : fileName,
-      assetFileNames : assetName,
-      format : 'es',
-      dir : opts.outputDir,
-      plugins : [
+    output: {
+      entryFileNames: fileName,
+      chunkFileNames: fileName,
+      assetFileNames: assetName,
+      format: 'es',
+      dir: opts.outputDir,
+      plugins: [
         // build to js supported by modern browsers
         babel.generated(babelConfigRollupGenerate),
         // create babel-helpers chunk based on es5 build
-        bundledBabelHelpers({minify : !developmentMode}),
+        bundledBabelHelpers({ minify: !developmentMode }),
       ],
     },
 
-    plugins : [
+    plugins: [
       // resolve bare module imports
       pluginWithOptions(resolve, opts.nodeResolve, {
-        moduleDirectory : [ 'node_modules', 'web_modules' ],
+        moduleDirectory: ['node_modules', 'web_modules'],
       }),
 
       // build non-standard syntax to standard syntax and other babel
       // optimization plugins user plugins are deduped to allow overriding
-      dedupedBabelPlugin(babel, opts.babel,
-                         createBabelConfigRollupBuild(developmentMode)),
+      dedupedBabelPlugin(babel, opts.babel, createBabelConfigRollupBuild(developmentMode)),
 
       // minify js code
-      !developmentMode &&
-          pluginWithOptions(terser, opts.terser, {output : {comments : false}}),
+      !developmentMode && pluginWithOptions(terser, opts.terser, { output: { comments: false } }),
     ].filter(isFalsy),
   };
 
@@ -76,14 +73,14 @@ function createBasicConfig(userOptions = {}) {
       config.output,
       {
         ...config.output,
-        entryFileNames : `nomodule-${fileName}`,
-        chunkFileNames : `nomodule-${fileName}`,
-        assetFileNames : `nomodule-${assetName}`,
-        plugins : [
+        entryFileNames: `nomodule-${fileName}`,
+        chunkFileNames: `nomodule-${fileName}`,
+        assetFileNames: `nomodule-${assetName}`,
+        plugins: [
           // buid to es5
           babel.generated(babelConfigLegacyRollupGenerate),
           // create babel-helpers chunk based on es5 build
-          bundledBabelHelpers({format : 'system', minify : !developmentMode}),
+          bundledBabelHelpers({ format: 'system', minify: !developmentMode }),
           // build to systemjs after helpers, so that helpers can be statically
           // analyzed
           babel.generated(babelConfigSystemJs),
@@ -94,4 +91,4 @@ function createBasicConfig(userOptions = {}) {
   return config;
 }
 
-module.exports = {createBasicConfig};
+module.exports = { createBasicConfig };

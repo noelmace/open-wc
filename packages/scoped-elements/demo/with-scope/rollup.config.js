@@ -1,11 +1,11 @@
-import {createSpaConfig} from '@open-wc/building-rollup';
+import { createSpaConfig } from '@open-wc/building-rollup';
 import merge from 'deepmerge';
 
 const baseConfig = createSpaConfig({
-  outputDir : '../../_site/scoped-elements/demo/with-scope',
-  legacyBuild : true,
+  outputDir: '../../_site/scoped-elements/demo/with-scope',
+  legacyBuild: true,
 });
 
 export default merge(baseConfig, {
-  input : './demo/with-scope/index.html',
+  input: './demo/with-scope/index.html',
 });

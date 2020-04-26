@@ -23,23 +23,23 @@ import nodeResolvePackageJson from '@rollup/plugin-node-resolve/package.json';
 import deepmerge from 'deepmerge';
 // typescript can't resolve a .cjs file
 // @ts-ignore
-import {parse} from 'es-module-lexer';
+import { parse } from 'es-module-lexer';
 import path from 'path';
 import pathIsInside from 'path-is-inside';
 import whatwgUrl from 'whatwg-url';
 
-import {createBabelTransform, defaultConfig} from './babel-transform.js';
-import {toBrowserPath} from './utils.js';
+import { createBabelTransform, defaultConfig } from './babel-transform.js';
+import { toBrowserPath } from './utils.js';
 
 const CONCAT_NO_PACKAGE_ERROR =
-    'Dynamic import with a concatenated string should start with a valid full package name.';
+  'Dynamic import with a concatenated string should start with a valid full package name.';
 
 const babelTransform = createBabelTransform(
-    // @ts-ignore
-    deepmerge(defaultConfig, {
-      babelrc : false,
-      configFile : false,
-    }),
+  // @ts-ignore
+  deepmerge(defaultConfig, {
+    babelrc: false,
+    configFile: false,
+  }),
 );
 
 export class ResolveSyntaxError extends Error {}
@@ -79,11 +79,9 @@ async function resolveConcatenatedImport(importer, importee, cfg) {
     pathToAppend = parts.slice(1, parts.length).join('/');
   }
 
-  const resolvedPackage =
-      await cfg.nodeResolve(`${pathToResolve}/package.json`, importer);
+  const resolvedPackage = await cfg.nodeResolve(`${pathToResolve}/package.json`, importer);
 
-  const packageDir = resolvedPackage.substring(0, resolvedPackage.length -
-                                                      'package.json'.length);
+  const packageDir = resolvedPackage.substring(0, resolvedPackage.length - 'package.json'.length);
   return `${packageDir}${pathToAppend}`;
 }
 
@@ -128,8 +126,7 @@ async function maybeResolveImport(importer, importee, concatenatedString, cfg) {
       // if this dynamic import is a concatenated string, try our best to
       // resolve. Otherwise leave it untouched and resolve it at runtime.
       try {
-        resolvedImportFilePath =
-            await resolveConcatenatedImport(importer, importee, cfg);
+        resolvedImportFilePath = await resolveConcatenatedImport(importer, importee, cfg);
       } catch (error) {
         return importee;
       }
@@ -139,28 +136,24 @@ async function maybeResolveImport(importer, importee, concatenatedString, cfg) {
 
     if (!pathIsInside(resolvedImportFilePath, cfg.rootDir)) {
       throw new Error(
-          `Import "${importee}" resolved to the file "${
-              resolvedImportFilePath}" which is outside the web server root, and cannot be served ` +
-              'by es-dev-server. Install the module locally in the current project, or expand the root directory. ' +
-              'If this is a symlink or if you used npm link, you can run es-dev-server with the --preserve-symlinks option',
+        `Import "${importee}" resolved to the file "${resolvedImportFilePath}" which is outside the web server root, and cannot be served ` +
+          'by es-dev-server. Install the module locally in the current project, or expand the root directory. ' +
+          'If this is a symlink or if you used npm link, you can run es-dev-server with the --preserve-symlinks option',
       );
     }
 
-    const relativeImportFilePath =
-        path.relative(sourceFileDir, resolvedImportFilePath);
+    const relativeImportFilePath = path.relative(sourceFileDir, resolvedImportFilePath);
     const resolvedimportee = toBrowserPath(relativeImportFilePath);
-    return resolvedimportee.startsWith('.') ? resolvedimportee
-                                            : `./${resolvedimportee}`;
+    return resolvedimportee.startsWith('.') ? resolvedimportee : `./${resolvedimportee}`;
   } catch (error) {
     // make module not found error message shorter
     if (error instanceof ModuleNotFoundError) {
       const relativeImportFilePath = path.relative(cfg.rootDir, importer);
       const resolvedimportee = toBrowserPath(relativeImportFilePath);
       const relativePathToErrorFile = resolvedimportee.startsWith('.')
-                                          ? resolvedimportee
-                                          : `./${resolvedimportee}`;
-      throw new Error(`Could not resolve import "${importee}" in "${
-          relativePathToErrorFile}".`);
+        ? resolvedimportee
+        : `./${resolvedimportee}`;
+      throw new Error(`Could not resolve import "${importee}" in "${relativePathToErrorFile}".`);
     }
     throw error;
   }
@@ -169,9 +162,7 @@ async function maybeResolveImport(importer, importee, concatenatedString, cfg) {
 function getImportee(importee) {
   const [withoutParams, params] = importee.split('?');
   const [withoutHash, hash] = withoutParams.split('#');
-  return [
-    withoutHash, `${params ? `?${params}` : ''}${hash ? `#${hash}` : ''}`
-  ];
+  return [withoutHash, `${params ? `?${params}` : ''}${hash ? `#${hash}` : ''}`];
 }
 
 /**
@@ -191,40 +182,33 @@ async function resolveModuleImportsWithConfig(importer, source, cfg) {
   let lastIndex = 0;
 
   for (const imp of imports) {
-    const {s : start, e : end, d : dynamicImportIndex} = imp;
+    const { s: start, e: end, d: dynamicImportIndex } = imp;
 
     if (dynamicImportIndex === -1) {
       // static import
-      const [importee, importeeSuffix] =
-          getImportee(source.substring(start, end));
-      const resolvedimportee =
-          await maybeResolveImport(importer, importee, false, cfg);
+      const [importee, importeeSuffix] = getImportee(source.substring(start, end));
+      const resolvedimportee = await maybeResolveImport(importer, importee, false, cfg);
 
-      resolvedSource += `${source.substring(lastIndex, start)}${
-          resolvedimportee}${importeeSuffix}`;
+      resolvedSource += `${source.substring(lastIndex, start)}${resolvedimportee}${importeeSuffix}`;
       lastIndex = end;
     } else if (dynamicImportIndex >= 0) {
       // dynamic import
       const dynamicStart = start + 1;
       const dynamicEnd = end - 1;
 
-      const [importee, importeeSuffix] =
-          getImportee(source.substring(dynamicStart, dynamicEnd));
+      const [importee, importeeSuffix] = getImportee(source.substring(dynamicStart, dynamicEnd));
       const stringSymbol = source[dynamicStart - 1];
-      const isStringLiteral = [ `\``, "'", '"' ].includes(stringSymbol);
-      const concatenatedString = stringSymbol === `\`` ||
-                                 importee.includes("'") ||
-                                 importee.includes('"');
-      const resolvedimportee =
-          isStringLiteral ? await maybeResolveImport(importer, importee,
-                                                     concatenatedString, cfg)
-                          : importee;
+      const isStringLiteral = [`\``, "'", '"'].includes(stringSymbol);
+      const concatenatedString =
+        stringSymbol === `\`` || importee.includes("'") || importee.includes('"');
+      const resolvedimportee = isStringLiteral
+        ? await maybeResolveImport(importer, importee, concatenatedString, cfg)
+        : importee;
 
-      resolvedSource += `${
-          source.substring(
-              lastIndex,
-              dynamicStart,
-              )}${resolvedimportee}${importeeSuffix}`;
+      resolvedSource += `${source.substring(
+        lastIndex,
+        dynamicStart,
+      )}${resolvedimportee}${importeeSuffix}`;
       lastIndex = dynamicEnd;
     }
   }
@@ -237,10 +221,12 @@ async function resolveModuleImportsWithConfig(importer, source, cfg) {
 }
 
 const fakePluginContext = {
-  meta : {
-    rollupVersion : nodeResolvePackageJson.peerDependencies.rollup,
+  meta: {
+    rollupVersion: nodeResolvePackageJson.peerDependencies.rollup,
   },
-  warn(...msg) { console.warn('[es-dev-server] node-resolve: ', ...msg); },
+  warn(...msg) {
+    console.warn('[es-dev-server] node-resolve: ', ...msg);
+  },
 };
 
 /**
@@ -253,19 +239,17 @@ export function createResolveModuleImports(rootDir, fileExtensions, opts) {
   const rollupResolve = createRollupResolve({
     rootDir,
     // allow resolving polyfills for nodejs libs
-    preferBuiltins : false,
-    extensions : fileExtensions,
+    preferBuiltins: false,
+    extensions: fileExtensions,
     ...opts,
   });
 
-  const preserveSymlinks = (opts && opts.customResolveOptions &&
-                            opts.customResolveOptions.preserveSymlinks) ||
-                           false;
-  rollupResolve.buildStart.call(fakePluginContext, {preserveSymlinks});
+  const preserveSymlinks =
+    (opts && opts.customResolveOptions && opts.customResolveOptions.preserveSymlinks) || false;
+  rollupResolve.buildStart.call(fakePluginContext, { preserveSymlinks });
 
   async function nodeResolve(importee, importer) {
-    const result = await rollupResolve.resolveId.call(fakePluginContext,
-                                                      importee, importer);
+    const result = await rollupResolve.resolveId.call(fakePluginContext, importee, importer);
     if (!result || !result.id) {
       throw new ModuleNotFoundError();
     }
@@ -273,9 +257,9 @@ export function createResolveModuleImports(rootDir, fileExtensions, opts) {
   }
 
   return (importer, source) =>
-             resolveModuleImportsWithConfig(importer, source, {
-               rootDir,
-               fileExtensions,
-               nodeResolve,
-             });
+    resolveModuleImportsWithConfig(importer, source, {
+      rootDir,
+      fileExtensions,
+      nodeResolve,
+    });
 }

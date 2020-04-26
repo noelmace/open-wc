@@ -1,11 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import {html, LitElement} from 'lit-element';
+import { html, LitElement } from 'lit-element';
 
 // @ts-ignore
 export class FakeInput extends LitElement {
   static get properties() {
     return {
-      focused : {type : Boolean, reflect : true},
+      focused: { type: Boolean, reflect: true },
     };
   }
 
@@ -23,13 +23,16 @@ export class FakeInput extends LitElement {
     }
   }
 
-  focusin() { this.focused = true; }
+  focusin() {
+    this.focused = true;
+  }
 
-  focusout() { this.focused = false; }
+  focusout() {
+    this.focused = false;
+  }
 
   render() {
-    return html` <input type="text" @focusin=${this.focusin} @focusout=${
-        this.focusout} /> `;
+    return html` <input type="text" @focusin=${this.focusin} @focusout=${this.focusout} /> `;
   }
 }
 

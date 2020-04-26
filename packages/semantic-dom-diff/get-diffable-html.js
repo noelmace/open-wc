@@ -1,5 +1,5 @@
-const DEFAULT_IGNORE_TAGS = [ 'script', 'style', 'svg' ];
-const DEFAULT_EMPTY_ATTRS = [ 'class', 'id' ];
+const DEFAULT_IGNORE_TAGS = ['script', 'style', 'svg'];
+const DEFAULT_EMPTY_ATTRS = ['class', 'id'];
 const VOID_ELEMENTS = [
   'area',
   'base',
@@ -72,18 +72,15 @@ const not = p => (...args) => !p(...args);
  * @returns {string} html restructured in a diffable format
  */
 export function getDiffableHTML(html, options = {}) {
-  const ignoreAttributes = /** @type {string[]} */ (
-      options.ignoreAttributes
-          ? options.ignoreAttributes.filter(e => typeof e === 'string')
-          : []);
-  const ignoreAttributesForTags = /** @type {IgnoreAttributesForTags[]} */ (
-      options.ignoreAttributes
-          ? options.ignoreAttributes.filter(e => typeof e !== 'string')
-          : []);
-  const ignoreTags = [...(options.ignoreTags || []), ...DEFAULT_IGNORE_TAGS ];
+  const ignoreAttributes = /** @type {string[]} */ (options.ignoreAttributes
+    ? options.ignoreAttributes.filter(e => typeof e === 'string')
+    : []);
+  const ignoreAttributesForTags = /** @type {IgnoreAttributesForTags[]} */ (options.ignoreAttributes
+    ? options.ignoreAttributes.filter(e => typeof e !== 'string')
+    : []);
+  const ignoreTags = [...(options.ignoreTags || []), ...DEFAULT_IGNORE_TAGS];
   const ignoreChildren = options.ignoreChildren || [];
-  const stripEmptyAttributes =
-      options.stripEmptyAttributes || DEFAULT_EMPTY_ATTRS;
+  const stripEmptyAttributes = options.stripEmptyAttributes || DEFAULT_EMPTY_ATTRS;
 
   let text = '';
   let depth = -1;
@@ -93,7 +90,9 @@ export function getDiffableHTML(html, options = {}) {
   const handledNodeStarted = new Set();
 
   /** @returns {string} */
-  function getIndentation() { return '  '.repeat(depth); }
+  function getIndentation() {
+    return '  '.repeat(depth);
+  }
 
   /** @param {Text} textNode */
   function printText(textNode) {
@@ -107,8 +106,11 @@ export function getDiffableHTML(html, options = {}) {
   /** @param {Node} node */
   function shouldProcessChildren(node) {
     const name = node.nodeName.toLowerCase();
-    return (!ignoreTags.includes(name) && !ignoreChildren.includes(name) &&
-            !handledChildrenForNode.has(node));
+    return (
+      !ignoreTags.includes(name) &&
+      !ignoreChildren.includes(name) &&
+      !handledChildrenForNode.has(node)
+    );
   }
 
   /**
@@ -118,10 +120,10 @@ export function getDiffableHTML(html, options = {}) {
    */
   function getClassListValueString(el) {
     // @ts-ignore
-    return [...el.classList.values() ].sort().join(' ');
+    return [...el.classList.values()].sort().join(' ');
   }
 
-  function shouldStripAttribute({name, value}) {
+  function shouldStripAttribute({ name, value }) {
     return stripEmptyAttributes.includes(name) && value.trim() === '';
   }
 
@@ -129,11 +131,9 @@ export function getDiffableHTML(html, options = {}) {
    * @param {Element} el
    * @param {Attr} attr
    */
-  function getAttributeString(el, {name, value}) {
-    if (shouldStripAttribute({name, value}))
-      return '';
-    if (name === 'class')
-      return ` class="${getClassListValueString(el)}"`;
+  function getAttributeString(el, { name, value }) {
+    if (shouldStripAttribute({ name, value })) return '';
+    if (name === 'class') return ` class="${getClassListValueString(el)}"`;
     return ` ${name}="${value}"`;
   }
 
@@ -150,11 +150,10 @@ export function getDiffableHTML(html, options = {}) {
       return !!ignoreAttributesForTags.find(e => {
         if (!e.tags || !e.attributes) {
           throw new Error(
-              `An object entry to ignoreAttributes should contain a 'tags' and an 'attributes' property.`,
+            `An object entry to ignoreAttributes should contain a 'tags' and an 'attributes' property.`,
           );
         }
-        return e.tags.includes(el.nodeName.toLowerCase()) &&
-               e.attributes.includes(attr.name);
+        return e.tags.includes(el.nodeName.toLowerCase()) && e.attributes.includes(attr.name);
       });
     };
   }
@@ -165,15 +164,14 @@ export function getDiffableHTML(html, options = {}) {
   function getAttributesString(el) {
     let attrStr = '';
     const attributes = Array.from(el.attributes)
-                           .filter(not(isIgnoredAttribute(el)))
-                           .sort(sortAttribute);
+      .filter(not(isIgnoredAttribute(el)))
+      .sort(sortAttribute);
 
     if (attributes.length === 1) {
       attrStr = getAttributeString(el, attributes[0]);
     } else if (attributes.length > 1) {
       for (let i = 0; i < attributes.length; i += 1) {
-        attrStr +=
-            `\n${getIndentation()} ${getAttributeString(el, attributes[i])}`;
+        attrStr += `\n${getIndentation()} ${getAttributeString(el, attributes[i])}`;
       }
       attrStr += `\n${getIndentation()}`;
     }
@@ -189,8 +187,7 @@ export function getDiffableHTML(html, options = {}) {
   /** @param {Node} node */
   function onNodeStart(node) {
     // don't print this node if we should ignore it
-    if (node.nodeName === 'DIFF-CONTAINER' ||
-        ignoreTags.includes(node.nodeName.toLowerCase())) {
+    if (node.nodeName === 'DIFF-CONTAINER' || ignoreTags.includes(node.nodeName.toLowerCase())) {
       return;
     }
 
@@ -212,8 +209,7 @@ export function getDiffableHTML(html, options = {}) {
 
   /** @param {Element} el */
   function printCloseElement(el) {
-    if (el.localName === 'diff-container' ||
-        VOID_ELEMENTS.includes(el.localName)) {
+    if (el.localName === 'diff-container' || VOID_ELEMENTS.includes(el.localName)) {
       return;
     }
 
@@ -246,10 +242,10 @@ export function getDiffableHTML(html, options = {}) {
   }
 
   const walker = document.createTreeWalker(
-      container,
-      NodeFilter.SHOW_TEXT + NodeFilter.SHOW_ELEMENT,
-      null,
-      false,
+    container,
+    NodeFilter.SHOW_TEXT + NodeFilter.SHOW_ELEMENT,
+    null,
+    false,
   );
 
   // walk the dom and create a diffable string representation
@@ -292,7 +288,13 @@ export function getDiffableHTML(html, options = {}) {
  * @return {arg is DiffOptions}
  */
 export function isDiffOptions(arg) {
-  return (arg && arg !== null && typeof arg === 'object' &&
-          ('ignoreAttributes' in arg || 'ignoreTags' in arg ||
-           'ignoreChildren' in arg || 'stripEmptyAttributes' in arg));
+  return (
+    arg &&
+    arg !== null &&
+    typeof arg === 'object' &&
+    ('ignoreAttributes' in arg ||
+      'ignoreTags' in arg ||
+      'ignoreChildren' in arg ||
+      'stripEmptyAttributes' in arg)
+  );
 }

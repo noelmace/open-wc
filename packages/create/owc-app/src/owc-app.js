@@ -1,3 +1,3 @@
-import {OwcApp} from './OwcApp.js';
+import { OwcApp } from './OwcApp.js';
 
 customElements.define('owc-app', OwcApp);

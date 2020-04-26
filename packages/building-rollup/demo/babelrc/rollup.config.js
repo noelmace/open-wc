@@ -1,10 +1,10 @@
 const merge = require('deepmerge');
-const {createSpaConfig} = require('../../index.js');
+const { createSpaConfig } = require('../../index.js');
 
 const baseConfig = createSpaConfig({
-  developmentMode : false,
+  developmentMode: false,
 });
 
 module.exports = merge(baseConfig, {
-  input : 'demo/babelrc/index.html',
+  input: 'demo/babelrc/index.html',
 });

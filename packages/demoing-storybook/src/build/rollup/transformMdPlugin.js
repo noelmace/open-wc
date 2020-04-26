@@ -1,5 +1,5 @@
-const {mdjsToCsf} = require('storybook-addon-markdown-docs');
-const {transformMdxToCsf} = require('../../shared/transformMdxToCsf');
+const { mdjsToCsf } = require('storybook-addon-markdown-docs');
+const { transformMdxToCsf } = require('../../shared/transformMdxToCsf');
 
 /**
  * @param {string[]} storyIds
@@ -23,4 +23,4 @@ function transformMdPlugin(storyIds) {
   };
 }
 
-module.exports = {transformMdPlugin};
+module.exports = { transformMdPlugin };

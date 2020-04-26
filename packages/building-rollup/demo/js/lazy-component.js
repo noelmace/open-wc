@@ -1,4 +1,4 @@
-import {css, html, LitElement} from 'lit-element';
+import { css, html, LitElement } from 'lit-element';
 
 class LazyComponent extends LitElement {
   static get styles() {
@@ -9,7 +9,9 @@ class LazyComponent extends LitElement {
     `;
   }
 
-  render() { return html` <p>Lazy component</p> `; }
+  render() {
+    return html` <p>Lazy component</p> `;
+  }
 }
 
 customElements.define('lazy-component', LazyComponent);

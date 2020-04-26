@@ -1,11 +1,11 @@
-const {types} = require('@babel/core');
-const {HELPER_MODULE_NAME} = require('./rollup-plugin-bundled-babel-helpers');
+const { types } = require('@babel/core');
+const { HELPER_MODULE_NAME } = require('./rollup-plugin-bundled-babel-helpers');
 
 /**
  * Babel plugin which imports babel helpers from a helper module.
  */
 const babelPluginBundledHelpers = {
-  name : 'bundled-helpers',
+  name: 'bundled-helpers',
 
   pre(file) {
     file.set('helperGenerator', name => this.addOrGetNamedImport(name, true));
@@ -21,13 +21,11 @@ const babelPluginBundledHelpers = {
         identifiersCache.set(name, identifier);
 
         if (!importDeclaration) {
-          importDeclaration = types.importDeclaration(
-              [], types.stringLiteral(HELPER_MODULE_NAME));
+          importDeclaration = types.importDeclaration([], types.stringLiteral(HELPER_MODULE_NAME));
           file.path.unshiftContainer('body', importDeclaration);
         }
 
-        importDeclaration.specifiers.push(
-            types.importSpecifier(identifier, importIdentifier));
+        importDeclaration.specifiers.push(types.importSpecifier(identifier, importIdentifier));
       } else {
         identifier = types.cloneNode(identifier);
       }
@@ -36,10 +34,10 @@ const babelPluginBundledHelpers = {
     };
   },
 
-  visitor : {
+  visitor: {
     ReferencedIdentifier(path) {
-      const {node} = path;
-      const {name} = node;
+      const { node } = path;
+      const { name } = node;
 
       if (name === 'regeneratorRuntime') {
         path.replaceWith(this.addOrGetNamedImport('regeneratorRuntime', true));
@@ -48,4 +46,4 @@ const babelPluginBundledHelpers = {
   },
 };
 
-module.exports = {babelPluginBundledHelpers};
+module.exports = { babelPluginBundledHelpers };

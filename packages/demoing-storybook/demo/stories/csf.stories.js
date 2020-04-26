@@ -1,6 +1,6 @@
 import '../demo-wc-card.js';
 
-import {html} from '../../index.js';
+import { html } from '../../index.js';
 
 export default {
   title: 'Demo Card/Component Story Format',
@@ -8,11 +8,11 @@ export default {
 };
 
 export const heading = () => html`
-    <h1>Hello World</h1>
-    <input type="text" />
-  `;
+  <h1>Hello World</h1>
+  <input type="text" />
+`;
 
 export const card = () => html` <demo-wc-card>Hello World</demo-wc-card> `;
 
-export const assets = () => html` <img src=${
-    new URL('../assets/logo.png', import.meta.url)} title="loaded logo" /> `;
+export const assets = () =>
+  html` <img src=${new URL('../assets/logo.png', import.meta.url)} title="loaded logo" /> `;
